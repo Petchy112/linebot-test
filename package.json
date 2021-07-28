@@ -1,0 +1,28 @@
+{
+  "name": "linebot-test",
+  "version": "1.0.0",
+  "description": "linebot test",
+  "main": "index.js",
+  "repository": "https://github.com/Petchy112/linebot-test.git",
+  "author": "Kittikan Ditkhanan <petch_501_@hotmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon API/index.js"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "^7.3.0",
+    "@phc/argon2": "^1.0.9",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http-errors": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.13.3",
+    "path": "^0.12.7",
+    "upash": "^1.0.2",
+    "validator": "^13.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
