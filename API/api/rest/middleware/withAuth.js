@@ -1,6 +1,7 @@
 const User = require('../../../models/userModel');
 const UserAuthToken = require('../../../models/userAuthModel');
 const ExpressRequest = require('express');
+const createError = require('http-errors');
 
 class checkAuth extends ExpressRequest {
     constructor() {
@@ -12,30 +13,31 @@ class checkAuth extends ExpressRequest {
 module.exports = async (req = checkAuth, res, next) => {
     try {
         if (req.headers.authorization) {
-            console.log(req.headers.authorization, 'authen');
             const token = req.headers.authorization.replace('Bearer ', '')
             const userTokenData = await UserAuthToken.findOne({ accessToken: token })
             if (userTokenData) {
                 const userData = await User.findOne({ _id: userTokenData.userId })
                 if (userData && userTokenData.accessTokenExpiresAt && userTokenData.accessTokenExpiresAt > new Date()) {
-                    ExpressRequest.accessToken = userTokenData.accessToken
-                    ExpressRequest.accessTokenExpiresAt = userTokenData.accessTokenExpiresAt
-                    ExpressRequest.userId = userData.id
+                    // save?
+                    userTokenData.accessToken = userTokenData.accessToken
+                    userTokenData.accessTokenExpires = userTokenData.accessTokenExpiresAt
+                    userTokenData.userId = userData.id
                     next()
                 }
                 else {
-                    ExpressRequest.userId = null
-                    next()
+                    userTokenData.userId = null
+                    next(createError(401, 'Please sign into website'))
+                    throw err
                 }
             }
         }
         else {
-            ExpressRequest.userId = null
+            req.userId = null
             next()
         }
     }
     catch (error) {
-        ExpressRequest.userId = null
+        req.userId = null
         next()
     }
 }

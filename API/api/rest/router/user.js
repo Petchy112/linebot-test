@@ -76,8 +76,7 @@ router.get('/data', withAuth, async (req, res, next) => {
         res.json(result);
     }
     catch {
-        next(error)
-        throw error
+        next(error);
     }
 })
 router.post('/changePassword', withAuth, async (req, res, next) => {
