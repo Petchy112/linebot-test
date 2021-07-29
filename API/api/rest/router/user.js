@@ -3,6 +3,7 @@ const userService = require('../../../services/user');
 const router = express.Router();
 const validate = require('validator');
 const createError = require('http-errors');
+const withAuth = require('../middleware/withAuth')
 
 router.post('/register', async (req, res, next) => {
 
@@ -59,4 +60,53 @@ router.post('/login', async (req, res, next) => {
 
     }
 })
+// router.post('/logout', async (req, res, next) => {
+//     try {
+//         const result = await userService.revokeAccessToken(req.headers.authorization.replace('Bearer ', ''))
+//         res.json(result);
+//     }
+//     catch {
+//         next(error)
+//         throw error
+//     }
+// })
+// router.get('/data', withAuth, async (req, res, next) => {
+//     try {
+//         const result = await userService.getProfile(req.headers.authorization.replace('Bearer ', ''))
+//         res.json(result);
+//     }
+//     catch {
+//         next(error)
+//         throw error
+//     }
+// })
+// router.post('/changePassword', withAuth, async (req, res, next) => {
+//     try {
+//         var { oldPassword, newPassword, confirmPassword } = req.body
+
+//         if (!oldPassword) {
+//             next(createError(400, 'old password was empty'))
+//             return
+
+//         }
+//         if (!newPassword) {
+//             next(createError(400, 'new password was empty'))
+//             return
+//         }
+//         if (!confirmPassword) {
+//             next(createError(400, 'comfirm password was empty'))
+//             return
+//         }
+//         if (confirmPassword !== newPassword) {
+//             next(createError(400, 'password is not match'))
+//             return
+//         }
+
+//         const result = await userService.changePassword(oldPassword, newPassword)
+//         res.json(result)
+//     }
+//     catch (error) {
+//         next(error)
+//     }
+// })
 module.exports = router
