@@ -5,9 +5,9 @@ const createError = require('http-errors');
 
 class checkAuth extends ExpressRequest {
     constructor() {
-        accessToken = String,
-            accessTokenExpiresAt = Date,
-            userId = String
+        accessToken = String
+        accessTokenExpiresAt = Date
+        userId = String
     }
 }
 module.exports = async (req = checkAuth, res, next) => {
@@ -18,14 +18,13 @@ module.exports = async (req = checkAuth, res, next) => {
             if (userTokenData) {
                 const userData = await User.findOne({ _id: userTokenData.userId })
                 if (userData && userTokenData.accessTokenExpiresAt && userTokenData.accessTokenExpiresAt > new Date()) {
-                    // save?
-                    userTokenData.accessToken = userTokenData.accessToken
-                    userTokenData.accessTokenExpires = userTokenData.accessTokenExpiresAt
-                    userTokenData.userId = userData.id
+                    req.accessToken = userTokenData.accessToken
+                    req.accessTokenExpiresAt = userTokenData.accessTokenExpiresAt
+                    req.userId = userData.id
                     next()
                 }
                 else {
-                    userTokenData.userId = null
+                    req.userId = null
                     next(createError(401, 'Please sign into website'))
                     throw err
                 }
