@@ -61,36 +61,36 @@ const userService = {
             throw createError(400, 'Email was invalid ,Please try again');
         }
     },
-    // async revokeAccessToken(accessToken) {
-    //     await UserAuthToken.findOneAndDelete({ accessToken });
-    //     return { message: 'Logout successful' }
-    // },
-    // async getProfile(accessToken) {
-    //     var userTokenData = await UserAuth.findOne({ accessToken })
-    //     var userInfo = await User.findOne({ userId: userTokenData.userId })
-    //     var result = {
-    //         firstname: userInfo.firstname,
-    //         lastname: userInfo.lastname,
-    //         email: userInfo.email
-    //     }
-    //     return result
-    // },
-    // async changePassword(email, oldPassword, newPassword) {
-    //     var thisUser = await User.findOne({ email })
+    async revokeAccessToken(accessToken) {
+        await UserAuthToken.findOneAndDelete({ accessToken });
+        return { message: 'Logout successful' }
+    },
+    async getProfile(accessToken) {
+        var userTokenData = await UserAuth.findOne({ accessToken })
+        var userInfo = await User.findOne({ userId: userTokenData.userId })
+        var result = {
+            firstname: userInfo.firstname,
+            lastname: userInfo.lastname,
+            email: userInfo.email
+        }
+        return result
+    },
+    async changePassword(email, oldPassword, newPassword) {
+        var thisUser = await User.findOne({ email })
 
-    //     if (thisUser) {
-    //         console.log(thisUser.passwordHash)
-    //         var ExistPassword = await argon2.verify(thisUser.passwordHash, oldPassword)
-    //         if (ExistPassword) {
-    //             throw createError(400, 'Please change password.')
-    //         }
-    //         else {
-    //             thisUser.passwordHash = await argon2.hash(newPassword)
-    //             thisUser.save()
-    //         }
-    //         return { message: 'change password successful' }
-    //     }
-    // },
+        if (thisUser) {
+            console.log(thisUser.passwordHash)
+            var ExistPassword = await argon2.verify(thisUser.passwordHash, oldPassword)
+            if (ExistPassword) {
+                throw createError(400, 'Please change password.')
+            }
+            else {
+                thisUser.passwordHash = await argon2.hash(newPassword)
+                thisUser.save()
+            }
+            return { message: 'change password successful' }
+        }
+    },
 }
 
 module.exports = userService
