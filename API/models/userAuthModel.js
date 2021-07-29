@@ -5,5 +5,5 @@ var schema = mongoose.Schema({
     accessTokenExpiresAt: { type: String, require: true }
 })
 
-var UserAuthToken = mongoose.model('userAuth', schema)
-module.exports = UserAuthToken
+var UserAuth = mongoose.model('userAuth', schema)
+module.exports = UserAuth
