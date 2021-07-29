@@ -3,7 +3,8 @@ const userService = require('../../../services/user');
 const router = express.Router();
 const validate = require('validator');
 const createError = require('http-errors');
-const withAuth = require('../middleware/withAuth')
+const withAuth = require('../middleware/withAuth');
+const { checkAuth } = require('../middleware/withAuth');
 
 router.post('/register', async (req, res, next) => {
 
@@ -70,7 +71,7 @@ router.post('/logout', async (req, res, next) => {
         throw error
     }
 })
-router.get('/data', withAuth, async (req, res, next) => {
+router.get('/data', async (req, res, next) => {
     try {
         const result = await userService.getProfile(req.headers.authorization.replace('Bearer ', ''))
         res.json(result);
@@ -79,14 +80,12 @@ router.get('/data', withAuth, async (req, res, next) => {
         next(error);
     }
 })
-router.post('/changePassword', withAuth, async (req, res, next) => {
+router.post('/:userId/changePassword', withAuth, async (req, res, next) => {
     try {
         var { oldPassword, newPassword, confirmPassword } = req.body
-
         if (!oldPassword) {
             next(createError(400, 'old password was empty'))
             return
-
         }
         if (!newPassword) {
             next(createError(400, 'new password was empty'))
@@ -101,11 +100,20 @@ router.post('/changePassword', withAuth, async (req, res, next) => {
             return
         }
 
-        const result = await userService.changePassword(oldPassword, newPassword)
+        const result = await userService.changePassword(req.params.userId, oldPassword, newPassword)
         res.json(result)
     }
     catch (error) {
         next(error)
+    }
+})
+
+router.post('/:userId', async (req, res, next) => {
+    try {
+        console.log(req.params.userId)
+    }
+    catch {
+        next(error);
     }
 })
 module.exports = router

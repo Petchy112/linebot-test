@@ -75,20 +75,20 @@ const userService = {
         }
         return result
     },
-    async changePassword(email, oldPassword, newPassword) {
-        var thisUser = await User.findOne({ email })
-
+    async changePassword(userId, oldPassword, newPassword) {
+        var thisUser = await User.findOne({ userId })
+        if (!await argon2.verify(thisUser.passwordHash, oldPassword)) {
+            throw createError(400, 'Old password was invalid')
+        }
         if (thisUser) {
-            console.log(thisUser.passwordHash)
-            var ExistPassword = await argon2.verify(thisUser.passwordHash, oldPassword)
-            if (ExistPassword) {
+            if (await argon2.verify(thisUser.passwordHash, newPassword)) {
                 throw createError(400, 'Please change password.')
             }
             else {
                 thisUser.passwordHash = await argon2.hash(newPassword)
                 thisUser.save()
+                return { message: 'change password success.' }
             }
-            return { message: 'change password successful' }
         }
     },
 }
