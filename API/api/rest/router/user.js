@@ -80,7 +80,7 @@ router.get('/data', async (req, res, next) => {
         next(error);
     }
 })
-router.post('/:userId/changePassword', withAuth, async (req, res, next) => {
+router.post('/changePassword', withAuth, async (req, res, next) => {
     try {
         var { oldPassword, newPassword, confirmPassword } = req.body
         if (!oldPassword) {
@@ -99,18 +99,17 @@ router.post('/:userId/changePassword', withAuth, async (req, res, next) => {
             next(createError(400, 'password is not match'))
             return
         }
-
-        const result = await userService.changePassword(req.params.userId, oldPassword, newPassword)
+        const result = await userService.changePassword(req.userId, oldPassword, newPassword)
         res.json(result)
     }
     catch (error) {
         next(error)
     }
 })
-
-router.post('/:userId', async (req, res, next) => {
+router.post('/test', withAuth, async (req, res, next) => {
     try {
-        console.log(req.params.userId)
+        console.log(req.userId, 'Petch');
+        console.log('12345')
     }
     catch {
         next(error);
