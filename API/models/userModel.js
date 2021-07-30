@@ -7,7 +7,9 @@ var schema = mongoose.Schema({
     passwordHash: { type: String, require: true },
     firstname: { type: String, require: true },
     lastname: { type: String, require: true },
-
+    role: {
+        type: String, enum: ['ADMIN', 'VOTER', 'COORDINATOR'], require: true
+    },
 
 })
 var User = mongoose.model('user', schema)
