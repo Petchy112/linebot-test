@@ -32,7 +32,7 @@ module.exports = async (req = checkAuth, res, next) => {
         }
         else {
             req.userId = null
-            next()
+            next(createError(401, 'No access token'))
         }
     }
     catch (error) {
