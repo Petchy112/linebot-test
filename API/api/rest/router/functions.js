@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const validate = require('validator');
-const Function = require('../../../models/functionModel')
-const path = require('path')
+const Function = require('../../../models/functionModel');
+const withAuth = require('../middleware/withAuth');
 const createError = require('http-errors');
 const functionsService = require('../../../services/function');
 
 
-router.get('/all', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
         const result = await Function.find().exec();
         await res.json(result);
@@ -25,6 +24,45 @@ router.post('/add', async (req, res, next) => {
     catch (error) {
         next(error)
         throw error
+    }
+})
+router.get('/:id', async (req, res, next) => {
+    try {
+        console.log(req.params.id)
+        var idGroup = req.params.id
+        await Function.findById((idGroup), (err, result) => {
+            if (err) next(error)
+            res.json(result);
+        })
+    }
+    catch {
+        next(error)
+        throw error
+    }
+})
+router.put('/:id/edit', async (req, res, next) => {
+    try {
+        console.log(req.params.id);
+        const result = await functionsService.editFunction(req.params.id, req.body)
+        res.json(result);
+    }
+    catch {
+        next(error)
+        throw error
+    }
+})
+router.delete('/:_id', async (req, res, next) => {
+    try {
+        await Function.findByIdAndDelete((req.params._id), (err, result) => {
+            if (err) next(error)
+            result = { message: 'Function is deleted' }
+            res.json(result);
+        })
+    }
+    catch {
+        next(error)
+        throw error
+
     }
 })
 

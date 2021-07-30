@@ -15,5 +15,14 @@ const functionsService = {
         return { message: 'Something went wrong!' }
 
     },
+    async editFunction(id, input) {
+        console.log('edit function called', id);
+        console.log(input)
+        await Function.findByIdAndUpdate({ _id: id }, {
+            group: input.group,
+            choice: input['choice']
+        })
+        return { message: 'Edit success' }
+    }
 }
 module.exports = functionsService
