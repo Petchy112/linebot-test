@@ -13,6 +13,7 @@ class checkAuth extends ExpressRequest {
 module.exports = async (req = checkAuth, res, next) => {
     try {
         if (req.headers.authorization) {
+            console.log(req.headers.authorization, 'in middleware ^^');
             const token = req.headers.authorization.replace('Bearer ', '')
             const userTokenData = await UserAuthToken.findOne({ accessToken: token })
             if (userTokenData) {

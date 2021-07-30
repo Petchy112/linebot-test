@@ -71,7 +71,7 @@ router.post('/logout', async (req, res, next) => {
         throw error
     }
 })
-router.get('/data', async (req, res, next) => {
+router.get('/data', withAuth, async (req, res, next) => {
     try {
         const result = await userService.getProfile(req.headers.authorization.replace('Bearer ', ''))
         res.json(result);
