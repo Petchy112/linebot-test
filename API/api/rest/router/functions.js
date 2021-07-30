@@ -6,7 +6,7 @@ const createError = require('http-errors');
 const functionsService = require('../../../services/function');
 
 
-router.get('/all', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
         const result = await Function.find().exec();
         await res.json(result);
@@ -31,6 +31,7 @@ router.get('/:id', async (req, res, next) => {
         console.log(req.params.id)
         var idGroup = req.params.id
         await Function.findById((idGroup), (err, result) => {
+            if (err) next(error)
             res.json(result);
         })
     }
@@ -48,6 +49,20 @@ router.put('/:id/edit', async (req, res, next) => {
     catch {
         next(error)
         throw error
+    }
+})
+router.delete('/:_id', async (req, res, next) => {
+    try {
+        await Function.findByIdAndDelete((req.params._id), (err, result) => {
+            if (err) next(error)
+            result = { message: 'Function is deleted' }
+            res.json(result);
+        })
+    }
+    catch {
+        next(error)
+        throw error
+
     }
 })
 
