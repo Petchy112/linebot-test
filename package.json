@@ -6,6 +6,10 @@
   "repository": "https://github.com/Petchy112/linebot-test.git",
   "author": "Kittikan Ditkhanan <petch_501_@hotmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "14.15.5",
+    "yarn": "1.22.10"
+  },
   "scripts": {
     "dev": "nodemon API/index.js"
   },
@@ -24,9 +28,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
-  },
-  "engines": {
-    "node": "14.15.5",
-    "yarn": "1.22.10"
   }
 }
