@@ -18,11 +18,19 @@ router.get('/', async (req, res, next) => {
 })
 router.post('/add', async (req, res, next) => {
     try {
+        const { body } = req
+        if (!body.group) {
+            next(createError(400, 'Groupname was empty'))
+            return
+        }
+        if (!body.choice) {
+            next(createError(400, 'Choice was empty'))
+            return
+        }
         const result = await functionsService.addFunction(req.body)
         await res.json(result);
     }
     catch (error) {
-        next(error)
         throw error
     }
 })
@@ -46,7 +54,7 @@ router.put('/:id/edit', async (req, res, next) => {
         const result = await functionsService.editFunction(req.params.id, req.body)
         res.json(result);
     }
-    catch {
+    catch (error) {
         next(error)
         throw error
     }
