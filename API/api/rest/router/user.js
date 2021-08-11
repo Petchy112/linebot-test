@@ -5,41 +5,46 @@ const validate = require('validator');
 const createError = require('http-errors');
 const withAuth = require('../middleware/withAuth');
 const { checkAuth } = require('../middleware/withAuth');
+const User = require('../../../models/userModel');
 
 router.post('/register', async (req, res, next) => {
-
-    var { body } = req
-    if (!body.email) {
-        next(createError(400, 'Email was empty'))
-        return
+    try{
+        var { body } = req
+        if (!body.email) {
+            next(createError(400, 'Email was empty'))
+            return
+        }
+        if (body.email && !validate.isEmail(body.email)) {
+            next(createError(400, 'Email was invalid'))
+            return
+        }
+        if (!body.password) {
+            next(createError(400, 'Password was empty'))
+            return
+        }
+        if (!body.confirmPassword) {
+            next(createError(400, 'Confirm Password was empty'))
+            return
+        }
+        if (body.confirmPassword !== body.password) {
+            next(createError(400, 'Password is not match'))
+            return
+        }
+        if (!body.firstname) {
+            next(createError(400, 'Firstname was empty'))
+            return
+        }
+        if (!body.lastname) {
+            next(createError(400, 'Lastname was empty'))
+            return
+        }
+        const result = await userService.register(req.body);
+        res.json(result);
     }
-    if (body.email && !validate.isEmail(body.email)) {
-        next(createError(400, 'Email was invalid'))
-        return
+    catch (error) {
+        next(error)
+        throw error
     }
-    if (!body.password) {
-        next(createError(400, 'Password was empty'))
-        return
-    }
-    if (!body.confirmPassword) {
-        next(createError(400, 'Confirm Password was empty'))
-        return
-    }
-    if (body.confirmPassword !== body.password) {
-        next(createError(400, 'Password is not match'))
-        return
-    }
-    if (!body.firstname) {
-        next(createError(400, 'fff'))
-        return
-    }
-    if (!body.lastname) {
-        next(createError(400, 'Lastname was empty'))
-        return
-    }
-    const result = await userService.register(req.body);
-    res.json(result);
-
 
 })
 router.post('/login', async (req, res, next) => {
@@ -106,13 +111,43 @@ router.post('/changePassword', withAuth, async (req, res, next) => {
         next(error)
     }
 })
-router.post('/test', withAuth, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
-        console.log(req.userId, 'Petch');
-        console.log('12345')
+        const result = await User.find().exec()
+        await res.json(result);
+    }
+    catch(error) {
+        next(error);
+        throw error
+    }
+})
+router.get('/:id', async (req, res, next) => {
+    try {
+        console.log(req.params.id)
+        var uid = req.params.id
+        await User.findById((uid), (err, result) => {
+            if (err) next(error)
+            res.json(result);
+        })
     }
     catch {
-        next(error);
+        next(error)
+        throw error
+    }
+})
+router.delete('/:id', async (req, res, next) => {
+    try {
+        console.log(req.params.id);
+        await User.findByIdAndDelete((req.params.id), (err, result) => {
+            if (err) next(error)
+            result = { message: 'User is deleted' }
+            res.json(result);
+        })
+    }
+    catch {
+        next(error)
+        throw error
+
     }
 })
 module.exports = router
