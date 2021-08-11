@@ -13,7 +13,7 @@ const functionsService = {
             await data.save()
 
         if (data) {
-            return { message: 'Add function successful' }
+            return { message: 'Add function successful' ,id:data._id }
         }
         return { message: 'Something went wrong!' }
 
