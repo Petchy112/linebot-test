@@ -6,7 +6,7 @@ const createError = require('http-errors');
 const functionsService = require('../../../services/function');
 
 
-router.get('/', async (req, res, next) => {
+router.get('/',withAuth, async (req, res, next) => {
     try {
         const result = await Function.find().exec();
         await res.json(result);
@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
         throw error
     }
 })
-router.post('/add', async (req, res, next) => {
+router.post('/add',withAuth , async (req, res, next) => {
     try {
         const { body } = req
         if (!body.group) {
@@ -34,7 +34,7 @@ router.post('/add', async (req, res, next) => {
         throw error
     }
 })
-router.get('/:id', async (req, res, next) => {
+router.get('/:id',withAuth, async (req, res, next) => {
     try {
         console.log(req.params.id)
         var idGroup = req.params.id
@@ -48,7 +48,7 @@ router.get('/:id', async (req, res, next) => {
         throw error
     }
 })
-router.put('/:id/edit', async (req, res, next) => {
+router.put('/:id/edit',withAuth, async (req, res, next) => {
     try {
         console.log(req.params.id);
         const result = await functionsService.editFunction(req.params.id, req.body)
@@ -59,7 +59,7 @@ router.put('/:id/edit', async (req, res, next) => {
         throw error
     }
 })
-router.delete('/:_id', async (req, res, next) => {
+router.delete('/:_id',withAuth, async (req, res, next) => {
     try {
         await Function.findByIdAndDelete((req.params._id), (err, result) => {
             if (err) next(error)
