@@ -14,6 +14,18 @@ router.get('/', async (req, res, next) => {
         throw error
     }
 })
+router.get('/:id', async (req, res, next) => {
+    try {
+        console.log(req.params.id);
+        var sid = req.params.id
+        const result = await Estimated.findById({_id:sid})
+        res.json(result);
+    }
+    catch {
+        next(error)
+        throw error
+    }
+})
 router.post('/save', withAuth, async (req, res, next) => {
     try {
         const result = await functionsService.saveEstimate(req.userId, req.body)
