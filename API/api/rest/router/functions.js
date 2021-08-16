@@ -19,6 +19,10 @@ router.get('/',withAuth, async (req, res, next) => {
 router.post('/add',withAuth , async (req, res, next) => {
     try {
         const { body } = req
+        if(!body.platform) {
+            next(createError(400, 'Platform was empty'))
+            return
+        }
         if (!body.group) {
             next(createError(400, 'Groupname was empty'))
             return
