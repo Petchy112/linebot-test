@@ -4,10 +4,11 @@ const VoteResult = require('../../../models/voteResultModel');
 const withAuth = require('../middleware/withAuth');
 const createError = require('http-errors');
 const voteService = require('../../../services/vote');
+const Time = require('../../../models/timeResultModel');
 
 router.get('/result', async (req, res, next) => {
     try {
-        const result = await VoteResult.find().exec();
+        const result = await Time.find().exec();
         await res.json(result);
     }
     catch (error) {
@@ -15,9 +16,9 @@ router.get('/result', async (req, res, next) => {
         throw error
     }
 })
-router.patch('/:fid/save',withAuth ,async (req, res, next) => {
+router.post('/:fid/save',withAuth ,async (req, res, next) => {
     try {
-        const result = await voteService.saveResult(req.userId, req.params.fid, req.body)
+        const result = await voteService.saveResult(req.body.choiceId, req.params.fid, req.body)
         await res.json(result);
     }
     catch (error) {
@@ -25,9 +26,9 @@ router.patch('/:fid/save',withAuth ,async (req, res, next) => {
         throw error
     }
 })
-router.post('/:_fid',withAuth, async (req, res, next) => {
+router.post('/:_fid', withAuth, async (req, res, next) => {
     try {
-        const result = await voteService.sentVote(req.userId,req.body.time,req.params._fid)
+        const result = await voteService.sentVote(req.userId, req.body.time, req.body.choiceId, req.params._fid)
         await res.json(result);
     }
     catch (error) {
@@ -35,17 +36,16 @@ router.post('/:_fid',withAuth, async (req, res, next) => {
         throw error
     }
 })
-router.post('/start' ,async (req, res, next) => {
-    try {
-        const result = await voteService.startVote()
-        await res.json(result)
+router.post('/:id', async(req, res, next) => {
+    try{
+        console.log(req.params.id)
     }
     catch (error) {
-        next (error)
+        next(error)
         throw error
     }
 })
-router.get('/:id',withAuth, async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
     try {
         console.log(req.params.id)
         var idGroup = req.params.id

@@ -5,10 +5,10 @@ const mongoose = require('mongoose')
 // })
 
 var schema = mongoose.Schema({
-    choiceId: { type: String, require: true },
-    userId: [String],
-    time: [Number],
-    totalTime: {type: Number, require: true}
+    choiceId: { type: String, require: false, default: ''},
+    userId: [String] ,require: false,
+    time: [Number],require: false,
+    totalTime: {type: Number, require: false, default: ''}
 })
 
 var Time = mongoose.model('time', schema)
