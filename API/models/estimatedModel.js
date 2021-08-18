@@ -6,6 +6,8 @@ var schema = mongoose.Schema({
     updateAt: { type: Date, default: Date.now() },
     createBy: { type: String, require: true },
     size: { type: String, require: true },
+    estimatedTime: { type: Number, require: false},
+    platform: { type: String, require:false },
     qty: { type: Number, require: true }
 });
 
