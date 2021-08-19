@@ -6,9 +6,9 @@ const createError = require('http-errors');
 const voteService = require('../../../services/vote');
 const Time = require('../../../models/timeResultModel');
 
-router.get('/result', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
-        const result = await Time.find().exec();
+        const result = await VoteResult.find().exec();
         await res.json(result);
     }
     catch (error) {
@@ -16,16 +16,20 @@ router.get('/result', async (req, res, next) => {
         throw error
     }
 })
-// router.post('/:fid/save',withAuth ,async (req, res, next) => {
-//     try {
-//         const result = await voteService.saveResult(req.body.choiceId, req.params.fid, req.body)
-//         await res.json(result);
-//     }
-//     catch (error) {
-//         next (error)
-//         throw error
-//     }
-// })
+router.get('/:id', async (req, res, next) => {
+    try {
+        console.log(req.params.id)
+        var id = req.params.id
+        await VoteResult.findById((id), (err, result) => {
+            if (err) next(error)
+            res.json(result);
+        })
+    }
+    catch (error) {
+        next(error)
+        throw error
+    }
+})
 router.post('/:_fid/save', withAuth, async (req, res, next) => {
     try {
         const result = await voteService.sentVote(req.userId, req.body, req.params._fid)
