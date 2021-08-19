@@ -16,19 +16,19 @@ router.get('/result', async (req, res, next) => {
         throw error
     }
 })
-router.post('/:fid/save',withAuth ,async (req, res, next) => {
+// router.post('/:fid/save',withAuth ,async (req, res, next) => {
+//     try {
+//         const result = await voteService.saveResult(req.body.choiceId, req.params.fid, req.body)
+//         await res.json(result);
+//     }
+//     catch (error) {
+//         next (error)
+//         throw error
+//     }
+// })
+router.post('/:_fid/save', withAuth, async (req, res, next) => {
     try {
-        const result = await voteService.saveResult(req.body.choiceId, req.params.fid, req.body)
-        await res.json(result);
-    }
-    catch (error) {
-        next (error)
-        throw error
-    }
-})
-router.post('/:_fid', withAuth, async (req, res, next) => {
-    try {
-        const result = await voteService.sentVote(req.userId, req.body.time, req.body.choiceId, req.params._fid)
+        const result = await voteService.sentVote(req.userId, req.body, req.params._fid)
         await res.json(result);
     }
     catch (error) {
