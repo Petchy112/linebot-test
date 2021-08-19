@@ -1,19 +1,27 @@
 const Function = require('../models/functionModel');
 const Estimated = require('../models/estimatedModel');
 const User = require('../models/userModel');
+const VoteResult = require('../models/voteResultModel')
 const createError = require('http-errors');
 
 const functionsService = {
     async addFunction(input) {
         console.log('add function called', input)
 
-        const data = new Function();
-        data.group = input.group,
-            data.choice = input['choice'],
-            await data.save()
+        const functionData = new Function();
+        functionData.group = input.group,
+        functionData.choice = input['choice'],
+        functionData.platform = input.platform
+            await functionData.save()
 
-        if (data) {
-            return { message: 'Add function successful' ,id:data._id }
+        const setTime = new VoteResult()
+        setTime.functionId = functionData._id
+        setTime.group = input.group,
+        setTime.platform = input.platform
+            await setTime.save()
+
+        if (functionData) {
+            return { message: 'Add function successful' ,id:functionData._id }
         }
         return { message: 'Something went wrong!' }
 
@@ -35,6 +43,8 @@ const functionsService = {
         estimatedData.projectName = result.projectName,
             estimatedData.choice = result['choice'],
             estimatedData.createBy = user.firstname,
+            estimatedData.platform = result.platform,
+            estimatedData.estimatedTime = result.estimatedTime
             estimatedData.size = result.size,
             estimatedData.qty = result.qty
 
