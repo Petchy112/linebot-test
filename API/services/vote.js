@@ -4,30 +4,6 @@ const createError = require('http-errors');
 const VoteResult = require('../models/voteResultModel');
 
 const voteService = {
-    // async saveResult(cid, fid, input) {
-
-    //     const data = await Function.findById(fid)
-    //     const a = []
-    //     data.choice.map(e => {
-    //         a.push({id:e._id,name:e.name})
-    //     })
-    //     console.log(a)
-    //     const z = []
-    //     const n = []
-    //     a.map(i =>{
-    //         z.push(i.id)
-    //         n.push(i.name)
-    //     })
-    //     t = []
-    //     const b = await Time.find({ choiceId: z })
-    //     b.map(item => {
-            
-    //         t.push({name:item.name,time: item.totalTime})
-    //     });
-    //     console.log(t);
-    
-        
-    // },
     async sentVote(uid, input, fid) {
         console.log(fid);
         
@@ -77,7 +53,8 @@ const voteService = {
         
         const setTime = await VoteResult.findOne({ functionId:fid })
         setTime.choice = t,
-        setTime.votingDate = Date.now()
+        date = new Date()
+        setTime.votingDate = date
             await setTime.save()
 
         var result = { message:'Sent result successful!'}
