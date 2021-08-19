@@ -62,7 +62,7 @@ const userService = {
         }
     },
     async revokeAccessToken(accessToken) {
-        await UserAuthToken.findOneAndDelete({ accessToken });
+        await UserAuth.findOneAndDelete({ accessToken });
         return { message: 'Logout successful' }
     },
     async getProfile(accessToken) {
