@@ -4,7 +4,7 @@ const withAuth = require('../middleware/withAuth');
 const Estimated = require('../../../models/estimatedModel');
 const functionsService = require('../../../services/function')
 
-router.get('/', async (req, res, next) => {
+router.get('/', withAuth,  async (req, res, next) => {
     try {
         const result = await Estimated.find().exec()
         res.json(result);
@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
         throw error
     }
 })
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', withAuth, async (req, res, next) => {
     try {
         console.log(req.params.id);
         var sid = req.params.id

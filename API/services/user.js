@@ -66,14 +66,20 @@ const userService = {
         return { message: 'Logout successful' }
     },
     async getProfile(accessToken) {
-        var userTokenData = await UserAuth.findOne({ accessToken })
-        var userInfo = await User.findOne({ userId: userTokenData.userId })
-        var result = {
-            firstname: userInfo.firstname,
-            lastname: userInfo.lastname,
-            email: userInfo.email
+        try {
+            var userTokenData = await UserAuth.findOne({ accessToken })
+            var userInfo = await User.findOne({ userId: userTokenData.userId })
+            var result = {
+                firstname: userInfo.firstname,
+                lastname: userInfo.lastname,
+                email: userInfo.email
+            }
+            return result
         }
-        return result
+        catch (error) {
+            next(error)
+            throw error
+        }
     },
     async changePassword(userId, oldPassword, newPassword) {
         var thisUser = await User.findOne({ userId })

@@ -7,7 +7,26 @@ const withAuth = require('../middleware/withAuth');
 const { checkAuth } = require('../middleware/withAuth');
 const User = require('../../../models/userModel');
 
-router.post('/register', async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
+    try {
+        var { body } = req
+        if (!body.email) {
+            next(createError(400, 'Email was empty'))
+            return
+        }
+        if (!body.password) {
+            next(createError(400, 'Password was empty'))
+            return
+        }
+        const result = await userService.login(body.email, body.password)
+        await res.json(result)
+    }
+    catch (error) {
+        next(error)
+
+    }
+})
+router.post('/register', withAuth, async (req, res, next) => {
     try{
         var { body } = req
         if (!body.email) {
@@ -47,28 +66,9 @@ router.post('/register', async (req, res, next) => {
     }
 
 })
-router.post('/login', async (req, res, next) => {
+router.post('/logout', withAuth, async (req, res, next) => {
     try {
-        var { body } = req
-        if (!body.email) {
-            next(createError(400, 'Email was empty'))
-            return
-        }
-        if (!body.password) {
-            next(createError(400, 'Password was empty'))
-            return
-        }
-        const result = await userService.login(body.email, body.password)
-        await res.json(result)
-    }
-    catch (error) {
-        next(error)
-
-    }
-})
-router.post('/logout', async (req, res, next) => {
-    try {
-        const result = await userService.revokeAccessToken(req.headers.authorization.replace('Bearer ', ''))
+        const result = await userService.revokeAccessToken(req.accessToken)
         res.json(result);
     }
     catch {
@@ -111,7 +111,7 @@ router.post('/changePassword', withAuth, async (req, res, next) => {
         next(error)
     }
 })
-router.get('/', async (req, res, next) => {
+router.get('/', withAuth, async (req, res, next) => {
     try {
         const result = await User.find().exec()
         await res.json(result);
@@ -121,7 +121,7 @@ router.get('/', async (req, res, next) => {
         throw error
     }
 })
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', withAuth, async (req, res, next) => {
     try {
         console.log(req.params.id)
         var uid = req.params.id
@@ -135,7 +135,7 @@ router.get('/:id', async (req, res, next) => {
         throw error
     }
 })
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', withAuth, async (req, res, next) => {
     try {
         console.log(req.params.id);
         await User.findByIdAndDelete((req.params.id), (err, result) => {
