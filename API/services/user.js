@@ -81,7 +81,7 @@ const userService = {
             throw error
         }
     },
-    async changePassword(userId, oldPassword, newPassword) {
+    async changePassword(oldPassword, newPassword, userId) {
         var thisUser = await User.findOne({ userId })
         if (!await argon2.verify(thisUser.passwordHash, oldPassword)) {
             throw createError(400, 'Old password was invalid')
