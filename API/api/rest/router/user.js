@@ -104,7 +104,7 @@ router.post('/changePassword', withAuth, async (req, res, next) => {
             next(createError(400, 'password is not match'))
             return
         }
-        const result = await userService.changePassword(req.userId, oldPassword, newPassword)
+        const result = await userService.changePassword(oldPassword, newPassword, req.userId)
         res.json(result)
     }
     catch (error) {
