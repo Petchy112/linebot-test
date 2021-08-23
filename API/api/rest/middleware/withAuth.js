@@ -1,5 +1,5 @@
 const User = require('../../../models/userModel');
-const UserAuthToken = require('../../../models/userAuthModel');
+const UserAuth = require('../../../models/userAuthModel');
 const ExpressRequest = require('express');
 const createError = require('http-errors');
 
@@ -15,7 +15,7 @@ module.exports = async (req = checkAuth, res, next) => {
         if (req.headers.authorization) {
             console.log(req.headers.authorization, 'in middleware ^^');
             const token = req.headers.authorization.replace('Bearer ', '')
-            const userTokenData = await UserAuthToken.findOne({ accessToken: token })
+            const userTokenData = await UserAuth.findOne({ accessToken : token })
             if (userTokenData) {
                 const userData = await User.findOne({ _id: userTokenData.userId })
                 if (userData && userTokenData.accessTokenExpiresAt && userTokenData.accessTokenExpiresAt > new Date()) {
@@ -26,14 +26,18 @@ module.exports = async (req = checkAuth, res, next) => {
                 }
                 else {
                     req.userId = null
-                    next(createError(401, 'Please sign into website'))
-                    throw err
+                    next(createError(401,'Please Sign into website'))
+                    console.log('error')
                 }
+            }
+            else {
+                req.userId = null
+                next(createError(401,'Please Sign into website'))
             }
         }
         else {
             req.userId = null
-            next(createError(401, 'No access token'))
+            next()
         }
     }
     catch (error) {
