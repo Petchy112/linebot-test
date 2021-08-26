@@ -8,7 +8,8 @@ const Time = require('../../../models/timeResultModel');
 
 router.get('/', async (req, res, next) => {
     try {
-        const result = await VoteResult.find().exec();
+        platform = req.query.platform
+        const result = await VoteResult.find({platform}).exec();
         await res.json(result);
     }
     catch (error) {
@@ -38,27 +39,19 @@ router.post('/:fid/save', withAuth, async (req, res, next) => {
         throw error
     }
 })
-router.post('/:id', async(req, res, next) => {
-    try{
-        console.log(req.params.id)
-    }
-    catch (error) {
-        next(error)
-        throw error
-    }
-})
-router.get('/:id', async (req, res, next) => {
-    try {
-        console.log(req.params.id)
-        var idGroup = req.params.id
-        await Function.findById((idGroup), (err, result) => {
-            if (err) next(error)
-            res.json(result);
-        })
-    }
-    catch {
-        next(error)
-        throw error
-    }
-})
+
+// router.get('/:id', async (req, res, next) => {
+//     try {
+//         console.log(req.params.id)
+//         var idGroup = req.params.id
+//         await Function.findById((idGroup), (err, result) => {
+//             if (err) next(error)
+//             res.json(result);
+//         })
+//     }
+//     catch {
+//         next(error)
+//         throw error
+//     }
+// })
 module.exports = router
