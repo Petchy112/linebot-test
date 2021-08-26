@@ -8,7 +8,8 @@ const functionsService = require('../../../services/function');
 
 router.get('/', withAuth, async (req, res, next) => {
     try {
-        const result = await Function.find().exec();
+        var platform = req.query.platform
+        const result = await Function.find({platform}).exec();
         await res.json(result);
     }
     catch (error) {
@@ -42,12 +43,12 @@ router.get('/:id', withAuth, async (req, res, next) => {
     try {
         console.log(req.params.id)
         var idGroup = req.params.id
-        await Function.findById((idGroup), (err, result) => {
-            if (err) next(error)
+        await Function.findById((idGroup), (error, result) => {
+            if (error) next(createError(404 ,'Not Found'))
             res.json(result);
         })
     }
-    catch {
+    catch (error) {
         next(error)
         throw error
     }
