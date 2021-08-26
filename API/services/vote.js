@@ -5,8 +5,6 @@ const VoteResult = require('../models/voteResultModel');
 
 const voteService = {
     async sentVote(uid, input, fid) {
-        
-        
         for (let round = 0; round < input.body.length; round++) {
             console.log(input.body[round].choiceId);
             var createdChoice = await Time.findOne({ choiceId:input.body[round].choiceId })
