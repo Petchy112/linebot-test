@@ -34,30 +34,29 @@ const voteService = {
                     
                 }
             }
-            const data = await Function.findById(fid)
-            const a = []
-            console.log(data.choice)
-            await data.choice.map(e => {
-                a.push({id:e._id,name:e.name})
+            const functionData = await Function.findById(fid)
+            const getName = []
+            console.log(functionData.choice)
+            await functionData.choice.map(el => {
+                getName.push({id:el._id,name:el.name})
             })
-            const z = []
-            const n = []
-            a.map(i =>{
-                z.push(i.id)
-                n.push(i.name)
+            const getChoice = []
+            
+            getName.map(i =>{
+                getChoice.push(i.id)
+                
             })
-            t = []
-            const b = await Time.find({ choiceId: z })
-            b.map(item => {
-                t.push({name:item.name,time: item.totalTime})
+            const data = []
+            const choiceHaveTime = await Time.find({ choiceId: getChoice })
+            choiceHaveTime.map(item => {
+                data.push({name:item.name,time: item.totalTime})
             });
-            console.log(t);
+            console.log(data);
         
             const setTime = await VoteResult.findOne({ functionId:fid })
-            setTime.choice = t,
-            date = new Date()
-            setTime.votingDate = date
-                await setTime.save()
+            console.log(setTime)
+            setTime.choices = data
+            await setTime.save()
 
             var result = { message:'Sent result successful!'}
             return result
