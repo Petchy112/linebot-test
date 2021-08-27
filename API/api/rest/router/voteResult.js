@@ -8,8 +8,7 @@ const Time = require('../../../models/timeResultModel');
 
 router.get('/', async (req, res, next) => {
     try {
-        platform = req.query.platform
-        const result = await VoteResult.find({platform}).exec();
+        const result = await VoteResult.find().exec();
         await res.json(result);
     }
     catch (error) {
@@ -19,9 +18,9 @@ router.get('/', async (req, res, next) => {
 })
 router.get('/:date', async (req, res, next) => {
     try {
-        console.log(req.params.date)
+        var platform = req.query.platform
         var date = req.params.date
-        const result = await VoteResult.find({ votingDate:date }).exec()
+        const result = await VoteResult.find({ $and: [ { votingDate:date  }, { platform } ] })
         res.json(result);
     }
     catch (error) {
