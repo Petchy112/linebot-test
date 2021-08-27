@@ -10,10 +10,12 @@ const userService = {
         console.log('register called', input);
 
         const userdata = new User();
-        userdata.email = input.email,
-            userdata.passwordHash = await argon2.hash(input.password),
-            userdata.firstname = input.firstname,
-            userdata.lastname = input.lastname
+        userdata.email = input.email
+        userdata.passwordHash = await argon2.hash(input.password)
+        userdata.firstname = input.firstname
+        userdata.lastname = input.lastname
+        userdata.role = input.role
+        
 
         var isExistEmail = await User.findOne({ email: input.email })
         if (isExistEmail) {
@@ -28,34 +30,39 @@ const userService = {
             return { message: 'Register successful' }
         }
     },
-    async login(email, password) {
+    async login(email, password, lineUserId) {
         const thisUser = await User.findOne({ email });
-
         if (thisUser) {
+            if (lineUserId) {
+                if (!thisUser.lineUserId) {
+                    thisUser.lineUserId = lineUserId
+                    await thisUser.save()
+                }
+            }
             var checkPassword = await argon2.verify(thisUser.passwordHash, password)
             if (!checkPassword) {
                 throw createError(400, 'Password was invalid');
             }
+            
+                const accessTokenExpiresAt = new Date()
+                const signOptionAccessToken = {
+                    ...config.session.JWT,
+                    expiresIn: config.auth.expireIn.accessToken
+                }
+                const payloadAccessToken = {
+                    firstname: thisUser.firstname,
+                    lastname: thisUser.lastname,
+                }
+                const expiresIn = config.auth.expireIn.accessToken;
+                accessTokenExpiresAt.setSeconds(accessTokenExpiresAt.getSeconds() + expiresIn)
 
-            const accessTokenExpiresAt = new Date()
-            const signOptionAccessToken = {
-                ...config.session.JWT,
-                expiresIn: config.auth.expireIn.accessToken
-            }
-            const payloadAccessToken = {
-                firstname: thisUser.firstname,
-                lastname: thisUser.lastname,
-            }
-            const expiresIn = config.auth.expireIn.accessToken;
-            accessTokenExpiresAt.setSeconds(accessTokenExpiresAt.getSeconds() + expiresIn)
-
-            const accessToken = jwt.sign(payloadAccessToken, 'secret', signOptionAccessToken)
-            const userdata = new UserAuth()
-            userdata.userId = thisUser.userId,
-                userdata.accessToken = accessToken,
-                userdata.accessTokenExpiresAt = accessTokenExpiresAt
-            userdata.save();
-            return { message: 'Login successful', accessToken: accessToken }
+                const accessToken = jwt.sign(payloadAccessToken, 'secret', signOptionAccessToken)
+                const userdata = new UserAuth()
+                userdata.userId = thisUser.userId,
+                    userdata.accessToken = accessToken,
+                    userdata.accessTokenExpiresAt = accessTokenExpiresAt
+                userdata.save();
+                return { message: 'Login successful', accessToken: accessToken, role: thisUser.role, lineUserId: thisUser.lineUserId }
         }
         else {
             throw createError(400, 'Email was invalid ,Please try again');
