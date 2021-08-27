@@ -16,23 +16,21 @@ router.get('/', async (req, res, next) => {
         throw error
     }
 })
-router.get('/:id', async (req, res, next) => {
+router.get('/:date', async (req, res, next) => {
     try {
-        console.log(req.params.id)
-        var id = req.params.id
-        await VoteResult.findById((id), (err, result) => {
-            if (err) next(error)
-            res.json(result);
-        })
+        var platform = req.query.platform
+        var date = req.params.date
+        const result = await VoteResult.find({ $and: [ { votingDate:date  }, { platform } ] })
+        res.json(result);
     }
     catch (error) {
         next(error)
         throw error
     }
 })
-router.post('/:_fid/save', withAuth, async (req, res, next) => {
+router.post('/:fid/save', withAuth, async (req, res, next) => {
     try {
-        const result = await voteService.sentVote(req.userId, req.body, req.params._fid)
+        const result = await voteService.sentVote(req.userId, req.body, req.params.fid)
         await res.json(result);
     }
     catch (error) {
@@ -40,27 +38,19 @@ router.post('/:_fid/save', withAuth, async (req, res, next) => {
         throw error
     }
 })
-router.post('/:id', async(req, res, next) => {
-    try{
-        console.log(req.params.id)
-    }
-    catch (error) {
-        next(error)
-        throw error
-    }
-})
-router.get('/:id', async (req, res, next) => {
-    try {
-        console.log(req.params.id)
-        var idGroup = req.params.id
-        await Function.findById((idGroup), (err, result) => {
-            if (err) next(error)
-            res.json(result);
-        })
-    }
-    catch {
-        next(error)
-        throw error
-    }
-})
+
+// router.get('/:id', async (req, res, next) => {
+//     try {
+//         console.log(req.params.id)
+//         var idGroup = req.params.id
+//         await Function.findById((idGroup), (err, result) => {
+//             if (err) next(error)
+//             res.json(result);
+//         })
+//     }
+//     catch {
+//         next(error)
+//         throw error
+//     }
+// })
 module.exports = router

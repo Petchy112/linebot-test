@@ -13,6 +13,10 @@ module.exports = config = {
             accessToken: 60 * 60
         }
     },
+    line: {
+        channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+        channelSecret: process.env.CHANNEL_SECRET,
+    },
     session: {
         JWT: {
             issuer: process.env.JWT_ISSUER,

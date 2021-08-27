@@ -4,8 +4,10 @@ const router = express.Router();
 const validate = require('validator');
 const createError = require('http-errors');
 const withAuth = require('../middleware/withAuth');
-const { checkAuth } = require('../middleware/withAuth');
 const User = require('../../../models/userModel');
+const line = require('@line/bot-sdk');
+const configLine = require('../../../config')
+const client = new line.Client(configLine.line);
 
 router.post('/login', async (req, res, next) => {
     try {
@@ -18,7 +20,13 @@ router.post('/login', async (req, res, next) => {
             next(createError(400, 'Password was empty'))
             return
         }
-        const result = await userService.login(body.email, body.password)
+        const result = await userService.login(body.email, body.password, body.lineUserId)
+        if(result.lineUserId) {
+            var userId = result.lineUserId
+            console.log(userId)
+            client.linkRichMenuToUser(userId, "richmenu-e65547a12446397d539aa7d100f8906c");
+        }
+        
         await res.json(result)
     }
     catch (error) {
@@ -55,6 +63,10 @@ router.post('/register', withAuth, async (req, res, next) => {
         }
         if (!body.lastname) {
             next(createError(400, 'Lastname was empty'))
+            return
+        }
+        if (!body.role) {
+            next(createError(400, 'Role was empty'))
             return
         }
         const result = await userService.register(req.body);
