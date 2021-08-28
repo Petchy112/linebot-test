@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "nodemon API/index.js",
-    "start": "node index.js",
+    "start": "node API/index.js",
   "build": "ng build",
   "heroku-postbuild": "ng build --prod" 
   
