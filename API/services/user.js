@@ -79,7 +79,8 @@ const userService = {
             var result = {
                 firstname: userInfo.firstname,
                 lastname: userInfo.lastname,
-                email: userInfo.email
+                email: userInfo.email,
+                role: userInfo.role
             }
             return result
         }

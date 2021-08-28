@@ -22,9 +22,14 @@ router.post('/login', async (req, res, next) => {
         }
         const result = await userService.login(body.email, body.password, body.lineUserId)
         if(result.lineUserId) {
-            var userId = result.lineUserId
-            console.log(userId)
-            client.linkRichMenuToUser(userId, "richmenu-e65547a12446397d539aa7d100f8906c");
+            if(result.role == 'VOTER'){
+                var userId = result.lineUserId
+                client.linkRichMenuToUser(userId, "richmenu-1a70fb410067f4f6dadbfb63f2bf763d");
+            }
+            else if(result.role == 'COORDINATOR') {
+                var userId = result.lineUserId
+                client.linkRichMenuToUser(userId, "richmenu-1da35d47533444251b3d19743ef17f93");
+            }
         }
         
         await res.json(result)
@@ -80,10 +85,13 @@ router.post('/register', withAuth, async (req, res, next) => {
 })
 router.post('/logout', withAuth, async (req, res, next) => {
     try {
-        const result = await userService.revokeAccessToken(req.accessToken)
+        const result = await userService.revokeAccessToken(req.accessToken,req.body.lineUserId)
+        if(req.body.lineUserId) {
+            client.unlinkRichMenuFromUser(req.body.lineUserId);
+        }
         res.json(result);
     }
-    catch {
+    catch (error) {
         next(error)
         throw error
     }
