@@ -13,7 +13,8 @@
   "scripts": {
     "dev": "nodemon API/index.js",
     "start": "node API/index.js",
-    "build": "ng build"
+    "build": "ng build",
+    "heroku-postbuild": "ng build --prod"
   },
   "dependencies": {
     "@line/bot-sdk": "^7.3.0",
