@@ -13,9 +13,7 @@
   "scripts": {
     "dev": "nodemon API/index.js",
     "start": "node API/index.js",
-  "build": "ng build"
-  
-  
+    "build": "ng build"
   },
   "dependencies": {
     "@line/bot-sdk": "^7.3.0",
@@ -24,11 +22,12 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "http-errors": "^1.8.0",
-    "import": "^0.0.6",
     "jsonwebtoken": "^8.5.1",
+    "mime-type": "^4.0.0",
+    "mkdirp": "^1.0.4",
     "mongoose": "^5.13.3",
+    "multer": "^1.4.3",
     "path": "^0.12.7",
-    "upash": "^1.0.2",
     "validator": "^13.6.0"
   },
   "devDependencies": {
