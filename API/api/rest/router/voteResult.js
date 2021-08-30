@@ -8,7 +8,8 @@ const Time = require('../../../models/timeResultModel');
 
 router.get('/', async (req, res, next) => {
     try {
-        const result = await VoteResult.find().exec();
+        var platform = req.query.platform
+        const result = await VoteResult.find({platform}).exec();
         await res.json(result);
     }
     catch (error) {

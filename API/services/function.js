@@ -33,6 +33,10 @@ const functionsService = {
             group: input.group,
             choice: input['choice']
         })
+        await VoteResult.findByOneAndUpdate({ functionId: id }, {
+            group: input.group,
+            
+        })
         return { message: 'Edit success' }
     },
     async saveEstimate(uid, result) {
@@ -41,10 +45,10 @@ const functionsService = {
         const user = await User.findOne({ userId: uid })
         const estimatedData = new Estimated()
         estimatedData.projectName = result.projectName,
-            estimatedData.choice = result['choice'],
+            estimatedData.choice = result['selectedChoice'],
             estimatedData.createBy = user.firstname,
             estimatedData.platform = result.platform,
-            estimatedData.estimatedTime = result.estimatedTime
+            estimatedData.estimatedTime = result.estimateTime
             estimatedData.size = result.size,
             estimatedData.qty = result.qty
 
