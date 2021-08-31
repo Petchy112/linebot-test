@@ -7,7 +7,8 @@
   "author": "Kittikan Ditkhanan <petch_501_@hotmail.com>",
   "license": "MIT",
   "engines": {
-    "yarn": "1.22.10"
+    "node": "14.15.5",
+    "npm": "6.14.11"
   },
   "scripts": {
     "dev": "nodemon API/index.js",
@@ -18,7 +19,7 @@
     "@line/bot-sdk": "^7.3.0",
     "@phc/argon2": "^1.0.9",
     "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
+    "dotenv": "^10.0.0",  
     "express": "^4.17.1",
     "http-errors": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
