@@ -24,7 +24,7 @@ router.post('/login', async (req, res, next) => {
         if(result.lineUserId) {
             if(result.role == 'VOTER'){
                 var userId = result.lineUserId
-                client.linkRichMenuToUser(userId, "richmenu-1a70fb410067f4f6dadbfb63f2bf763d");
+                client.linkRichMenuToUser(userId, "richmenu-b6eb563994d44457873e713e3e3f9983");
             }
             else if(result.role == 'COORDINATOR') {
                 var userId = result.lineUserId
@@ -36,6 +36,7 @@ router.post('/login', async (req, res, next) => {
     }
     catch (error) {
         next(error)
+        throw error
 
     }
 })
@@ -85,9 +86,10 @@ router.post('/register', withAuth, async (req, res, next) => {
 })
 router.post('/logout', withAuth, async (req, res, next) => {
     try {
-        const result = await userService.revokeAccessToken(req.accessToken,req.body.lineUserId)
-        if(req.body.lineUserId) {
-            client.unlinkRichMenuFromUser(req.body.lineUserId);
+        console.log(req.headers['lineuserid']);
+        const result = await userService.revokeAccessToken(req.accessToken,req.headers['lineuserid'])
+        if(req.headers['lineuserid']) {
+            client.unlinkRichMenuFromUser(req.headers['lineuserid']);
         }
         res.json(result);
     }

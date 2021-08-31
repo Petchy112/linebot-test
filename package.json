@@ -7,14 +7,12 @@
   "author": "Kittikan Ditkhanan <petch_501_@hotmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "14.15.5",
     "yarn": "1.22.10"
   },
   "scripts": {
     "dev": "nodemon API/index.js",
     "start": "node API/index.js",
-    "build": "ng build",
-    "heroku-postbuild": "ng build --prod"
+    "build": "webpack"
   },
   "dependencies": {
     "@line/bot-sdk": "^7.3.0",

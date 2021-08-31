@@ -31,6 +31,7 @@ const userService = {
         }
     },
     async login(email, password, lineUserId) {
+        console.log('login call',email)
         const thisUser = await User.findOne({ email });
         if (thisUser) {
             if (lineUserId) {
