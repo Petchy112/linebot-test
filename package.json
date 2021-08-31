@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "nodemon API/index.js",
+    "start": "node API/index.js",
     "test":"echo \"Error: no test specified \" &&exit 1"
   },
   "dependencies": {
