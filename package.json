@@ -11,8 +11,8 @@
     "npm": "6.14.11"
   },
   "scripts": {
-    "dev": "nodemon API/index.js"
-    
+    "dev": "nodemon API/index.js",
+    "test":"echo \"Error: no test specified \" &&exit 1"
   },
   "dependencies": {
     "@line/bot-sdk": "^7.3.0",
