@@ -14,11 +14,6 @@ const functionsService = {
         functionData.platform = input.platform
             await functionData.save()
 
-        const setTime = new VoteResult()
-        setTime.functionId = functionData._id
-        setTime.group = input.group,
-        setTime.platform = input.platform
-            await setTime.save()
 
         if (functionData) {
             return { message: 'Add function successful' ,id:functionData._id }
