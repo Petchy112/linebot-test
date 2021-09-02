@@ -11,7 +11,8 @@ var schema = mongoose.Schema({
     functionId: {type: String , require: true },
     group: { type: String, require: true },
     choices: { type: Array.of(choiceSchema), require: false },
-    votingDate: { type: Date, default: Date.now() }
+    votingDate: { type: String, require: false },
+    voteRound: { type:Number, require: false}
 });
 
 var VoteResult = mongoose.model('results', schema)
