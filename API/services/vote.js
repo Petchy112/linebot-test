@@ -120,7 +120,7 @@ const voteService = {
                     doc.save();
                 });
 
-        return { message : 'Voteing is already close'}
+        return { message : 'Voting is already close'}
     },
     async ChangeStatusToOpen(action) {
 
@@ -133,7 +133,7 @@ const voteService = {
                     doc.save();
                 });
 
-        return { message : 'Voteing is already open'}
+        return { message : 'Voting is already open'}
     },
     async sentVote(uid, input, fid) {
         const functionData = await Function.findById(fid)
