@@ -108,23 +108,32 @@ const voteService = {
     //     return result
         
     // },
-    async ChangeStatusToON() {
+    async ChangeStatusToClose(action) {
+        console.log(action)
         console.log('change vote status called');
-        // const data = await Func
-        // const setTime = new VoteResult()
-        // setTime.functionId = functionData._id
-        // setTime.group = input.group,
-        // setTime.platform = input.platform
-        //     await setTime.save()
-        // const data = await Function.find({status: { $eq: false}})
-        const old = await VoteResult.findOne(VoteRound)
-        const start = new VoteResult()
-        console.log(old);
-        // start.voteRound
-        // await start.save()
+        const result = await Function.find({status : 'OPEN'})
+            await result.forEach(doc => {
+                if (doc.status == 'OPEN') {
+                    doc.status = 'CLOSE';
+                    doc.round++;
+                }
+                    doc.save();
+                });
 
-        var result = { message:'start successful'}
-        return result
+        return { message : 'Voteing is already close'}
+    },
+    async ChangeStatusToOpen(action) {
+
+        console.log('change vote status called', action);
+        const result = await Function.find({status : 'CLOSE'})
+            await result.forEach(doc => {
+                if (doc.status == 'CLOSE') {
+                    doc.status = 'OPEN';
+                }
+                    doc.save();
+                });
+
+        return { message : 'Voteing is already open'}
     },
     async sentVote(uid, input, fid) {
         const functionData = await Function.findById(fid)

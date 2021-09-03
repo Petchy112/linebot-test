@@ -74,12 +74,12 @@ router.post('/:fid/save', withAuth, async (req, res, next) => {
 router.post('/controlVote', async (req, res, next) => {
     try {
         let action = req.query.action
-        if(action=='start') {
-            const result = await voteService.ChangeStatusToON();
+        if(action=='OPEN') {
+            const result = await voteService.ChangeStatusToOpen(action);
             res.json(result);
         }
-        if (action=='stop') {
-            const result = await voteService.ChangeStatusToOFF();
+        if (action=='CLOSE') {
+            const result = await voteService.ChangeStatusToClose(action);
             res.json(result);
         }
         
