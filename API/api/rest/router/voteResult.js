@@ -71,7 +71,7 @@ router.post('/:fid/save', withAuth, async (req, res, next) => {
         throw error
     }
 })
-router.post('/controlVote', async (req, res, next) => {
+router.post('/controlVote', withAuth, async (req, res, next) => {
     try {
         let action = req.query.action
         if(action=='OPEN') {
