@@ -28,7 +28,7 @@ const functionsService = {
             group: input.group,
             choice: input['choice']
         })
-        await VoteResult.findByOneAndUpdate({ functionId: id }, {
+        await VoteResult.findOneAndUpdate({ functionId: id }, {
             group: input.group,
             
         })
