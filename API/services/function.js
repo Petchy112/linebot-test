@@ -32,7 +32,7 @@ const functionsService = {
             group: input.group,
             
         })
-        return { message: 'Edit success' }
+        return { message: 'Edit successful' }
     },
     async saveEstimate(uid, result) {
         console.log('save estimate called', result);
