@@ -49,18 +49,6 @@ router.get('/:round', async (req, res, next) => {
         throw error
     }
 })
-// router.get('/:date', async (req, res, next) => {
-//     try {
-//         var platform = req.query.platform
-//         var date = req.params.date
-//         const result = await VoteResult.find({ $and: [ { votingDate:date  }, { platform } ] })
-//         res.json(result);
-//     }
-//     catch (error) {
-//         next(error)
-//         throw error
-//     }
-// })
 router.post('/save', withAuth, async (req, res, next) => {
     try {
         const result = await voteService.sentVote(req.userId, req.body)
