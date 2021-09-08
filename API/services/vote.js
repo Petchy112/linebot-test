@@ -112,10 +112,10 @@ const voteService = {
         console.log(action)
         console.log('change vote status called');
         const result = await Function.find({status : 'OPEN'})
-            await result.forEach(doc => {
+            await result.forEach(async doc => {
                 if (doc.status == 'OPEN') {
-                    doc.status = 'CLOSE';
-                    doc.round++;
+                        doc.status = 'CLOSE';
+                    await doc.round++;
                 }
                     doc.save();
                 });
@@ -135,15 +135,15 @@ const voteService = {
 
         return { message : 'Voting is already open'}
     },
-    async sentVote(uid, input, fid) {
-        const functionData = await Function.findById(fid)
-        if(functionData.status == 'CLOSE') {
-            throw createError(400, 'Voting is closed')
-        }
+    async sentVote(uid, input) {
         for (let round = 0; round < input.body.length; round++) {
+            const functionData = await Function.findById(input.body[round].fid)
+            if(functionData.status == 'CLOSE') {
+                throw createError(400, 'Voting is closed')
+            }
             console.log('choice : ',input.body[round].choiceId);
             
-            var createdChoice = await Time.findOne({ choiceId:input.body[round].choiceId })
+            var createdChoice = await Time.findOne({ choiceId: input.body[round].choiceId })
             if(!createdChoice) {
                 const newResult = new Time();
                     newResult.choiceId = input.body[round].choiceId,
@@ -165,45 +165,44 @@ const voteService = {
                 createdChoice.totalTime = sum/createdChoice.time.length
                 await createdChoice.save()         
             }
-        }
+        
             
         
-        const getName = []
-        await functionData.choice.map(el => {
-            getName.push({id:el._id, name:el.name})
-        })
-        const getChoice = []
+            const getName = []
+            await functionData.choice.map(el => {
+                getName.push({id:el._id, name:el.name})
+            })
+            const getChoice = []
+                
+            await getName.map(i =>{
+                getChoice.push(i.id)    
+            })
+
+            const rawData = []
+            const choiceHaveTime = await Time.find({ choiceId: getChoice })
+            choiceHaveTime.map(item => {
+                rawData.push({name:item.name, time: item.totalTime})
+            });
             
-        await getName.map(i =>{
-            getChoice.push(i.id)    
-        })
-
-        const rawData = []
-        const choiceHaveTime = await Time.find({ choiceId: getChoice })
-        choiceHaveTime.map(item => {
-            rawData.push({name:item.name, time: item.totalTime})
-        });
-        
-        const update = await VoteResult.findOne({functionId:fid})
-        console.warn(update);
-        if(update) {
-            console.log('found');
-            update.choices = rawData
-                await update.save()
+            const update = await VoteResult.findOne({functionId:input.body[round].fid})
+            console.warn(update);
+            if(update) {
+                console.log('found');
+                update.choices = rawData
+                    await update.save()
+            }
+            if (update==null) {
+                console.log('not found');
+                const setTime = new VoteResult()
+                setTime.platform = functionData.platform
+                setTime.functionId = input.body[round].fid
+                setTime.group = functionData.group
+                setTime.choices = rawData
+                setTime.voteRound = functionData.round
+                console.log(setTime);
+                    await setTime.save()
+            }
         }
-        if (update==null) {
-            console.log('not found');
-            const setTime = new VoteResult()
-            setTime.platform = functionData.platform
-            setTime.functionId = fid
-            setTime.group = functionData.group
-            setTime.choices = rawData
-            setTime.voteRound = functionData.round
-            console.log(setTime);
-                await setTime.save()
-        }
-
-    
         var result = { message:'Sent result successful!'}
         return result
         

@@ -61,9 +61,9 @@ router.get('/:round', async (req, res, next) => {
 //         throw error
 //     }
 // })
-router.post('/:fid/save', withAuth, async (req, res, next) => {
+router.post('/save', withAuth, async (req, res, next) => {
     try {
-        const result = await voteService.sentVote(req.userId, req.body, req.params.fid)
+        const result = await voteService.sentVote(req.userId, req.body)
         await res.json(result);
     }
     catch (error) {
