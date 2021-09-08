@@ -4,8 +4,7 @@ const Image = require('../models/Image');
 const imageService = {
     async uploadImage(accessToken, imageData) {
         console.log('upload image called', accessToken)
-        console.log(imageData)
-
+        
         const userTokenData = await UserAuth.findOne({ accessToken })
         console.log(userTokenData);
         

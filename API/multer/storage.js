@@ -3,7 +3,6 @@ const mkdirp = require('mkdirp');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        
         console.log(req,file);
 
         const dest = './uploads/'
