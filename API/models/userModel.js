@@ -9,7 +9,7 @@ var schema = mongoose.Schema({
     lastname: { type: String, require: true },
     lineUserId: { type: String, require:false },
     role: {
-        type: String, enum: ['ADMIN', 'VOTER', 'COORDINATOR'], require: true
+        type: Array, require: true
     },
 
 })
