@@ -4,6 +4,7 @@ const TimeResult = require('./timeResultModel');
 var choiceSchema = mongoose.Schema({
     name: { type: String, require: true },
     description: { type: String, require: true },
+    time: { type: Number, require: false },
 })
 
 var schema = mongoose.Schema({
