@@ -21,23 +21,29 @@ router.post('/login', async (req, res, next) => {
             return
         }
         const result = await userService.login(body.email, body.password, body.lineUserId)
-        if(result.lineUserId) {
-            if(result.role == 'VOTER'){
-                var userId = result.lineUserId
-                client.linkRichMenuToUser(userId, "richmenu-b6eb563994d44457873e713e3e3f9983");
-            }
-            else if(result.role == 'COORDINATOR') {
-                var userId = result.lineUserId
-                client.linkRichMenuToUser(userId, "richmenu-1da35d47533444251b3d19743ef17f93");
-            }
-        }
-        
         await res.json(result)
     }
     catch (error) {
         next(error)
         throw error
-
+    }
+})
+router.post('/selectRole', withAuth, async (req, res, next) => {
+    try {
+        var role = req.body.role
+            if(role == 'VOTER'){
+                var userId = req.headers['lineuserid']
+                client.linkRichMenuToUser(userId, "richmenu-b6eb563994d44457873e713e3e3f9983");
+            }
+            else if(role == 'COORDINATOR') {
+                var userId = req.headers['lineuserid']
+                client.linkRichMenuToUser(userId, "richmenu-1da35d47533444251b3d19743ef17f93");
+            }
+        
+    }
+    catch (error) {
+        next(error)
+        throw error
     }
 })
 router.post('/register', withAuth, async (req, res, next) => {
