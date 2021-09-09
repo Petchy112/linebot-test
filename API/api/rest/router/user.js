@@ -31,6 +31,9 @@ router.post('/login', async (req, res, next) => {
 router.post('/selectRole', withAuth, async (req, res, next) => {
     try {
         var role = req.body.role
+            if(role == 'ADMIN'){
+                next(createError(403 , 'ADMIN NOT PERMISSION IN LINE'))
+            }
             if(role == 'VOTER'){
                 var userId = req.headers['lineuserid']
                 client.linkRichMenuToUser(userId, "richmenu-b6eb563994d44457873e713e3e3f9983");
@@ -39,7 +42,8 @@ router.post('/selectRole', withAuth, async (req, res, next) => {
                 var userId = req.headers['lineuserid']
                 client.linkRichMenuToUser(userId, "richmenu-1da35d47533444251b3d19743ef17f93");
             }
-        
+        var result = {message: 'selected role '}
+        res.json(result)
     }
     catch (error) {
         next(error)
