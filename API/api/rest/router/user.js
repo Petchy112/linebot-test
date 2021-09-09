@@ -157,12 +157,12 @@ router.get('/:id', withAuth, async (req, res, next) => {
     try {
         console.log(req.params.id)
         var uid = req.params.id
-        await User.findById((uid), (err, result) => {
-            if (err) next(error)
+        await User.findById((uid), (error, result) => {
+            if (error) next(error)
             res.json(result);
         })
     }
-    catch {
+    catch (error) {
         next(error)
         throw error
     }
