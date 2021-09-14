@@ -44,6 +44,8 @@ const voteService = {
                 const newResult = new Time();
                     newResult.choiceId = input.body[round].choiceId,
                     newResult.name = input.body[round].name
+                    newResult.description = input.body[round].description
+                    newResult.imagePath = input.body[round].imagePath
                     newResult.userId = uid,
                     newResult.time = input.body[round].time,
                     newResult.totalTime = input.body[round].time
@@ -52,6 +54,8 @@ const voteService = {
             else if(createdChoice) {
                 createdChoice.choiceId = input.body[round].choiceId,
                 createdChoice.name = input.body[round].name,
+                createdChoice.description = input.body[round].description
+                createdChoice.imagePath = input.body[round].imagePath
                 createdChoice.userId.push(uid),
                 createdChoice.time.push(input.body[round].time)
                     
@@ -77,7 +81,7 @@ const voteService = {
             const rawData = []
             const choiceHaveTime = await Time.find({ choiceId: getChoice })
             choiceHaveTime.map(item => {
-                rawData.push({name:item.name, time: item.totalTime})
+                rawData.push({name:item.name, description: item.description ,imagePath: item.imagePath ,time: item.totalTime})
             });
             
             const update = await VoteResult.findOne({functionId:input.body[round].fid})
