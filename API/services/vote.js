@@ -80,8 +80,8 @@ const voteService = {
 
             const rawData = []
             const choiceHaveTime = await Time.find({ choiceId: getChoice })
-            choiceHaveTime.map(item => {
-                rawData.push({name:item.name, description: item.description ,imagePath: item.imagePath ,time: item.totalTime})
+            choiceHaveTime.map(async item => {
+                await rawData.push({name:item.name, description: item.description ,imagePath: item.imagePath ,time: item.totalTime})
             });
             
             const update = await VoteResult.findOne({functionId:input.body[round].fid})
