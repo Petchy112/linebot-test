@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Function = require('../../../models/functionModel');
+const Function = require('../../../models/Function');
 const withAuth = require('../middleware/withAuth');
 const createError = require('http-errors');
 const functionsService = require('../../../services/function');

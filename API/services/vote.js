@@ -1,7 +1,7 @@
-const Time = require('../models/timeResultModel');
-const Function = require('../models/functionModel');
+const Time = require('../models/Time');
+const Function = require('../models/Function');
 const createError = require('http-errors');
-const VoteResult = require('../models/voteResultModel');
+const VoteResult = require('../models/VoteResult');
 
 const voteService = {
     async ChangeStatusToClose(action) {

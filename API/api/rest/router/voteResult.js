@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const VoteResult = require('../../../models/voteResultModel');
+const VoteResult = require('../../../models/VoteResult');
 const withAuth = require('../middleware/withAuth');
 const createError = require('http-errors');
 const voteService = require('../../../services/vote');
-const Function = require('../../../models/functionModel');
+const Function = require('../../../models/Function');
 
 
 router.get('/', async (req, res, next) => {

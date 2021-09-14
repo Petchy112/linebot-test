@@ -1,5 +1,5 @@
-const User = require('../models/userModel');
-const UserAuth = require('../models/userAuthModel');
+const User = require('../models/User');
+const UserAuth = require('../models/UserAuth');
 const createError = require('http-errors');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
@@ -78,6 +78,7 @@ const userService = {
             var userTokenData = await UserAuth.findOne({ accessToken })
             var userInfo = await User.findOne({ userId: userTokenData.userId })
             var result = {
+                id: userInfo._id,
                 firstname: userInfo.firstname,
                 lastname: userInfo.lastname,
                 email: userInfo.email,

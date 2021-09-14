@@ -1,5 +1,5 @@
-const User = require('../../../models/userModel');
-const UserAuth = require('../../../models/userAuthModel');
+const User = require('../../../models/User');
+const UserAuth = require('../../../models/UserAuth');
 const ExpressRequest = require('express');
 const createError = require('http-errors');
 

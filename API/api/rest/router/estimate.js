@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const withAuth = require('../middleware/withAuth');
-const Estimated = require('../../../models/estimatedModel');
+const Estimated = require('../../../models/EstimateResult')
 const functionsService = require('../../../services/function')
 
 router.get('/', withAuth,  async (req, res, next) => {

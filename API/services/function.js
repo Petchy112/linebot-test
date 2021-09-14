@@ -1,7 +1,7 @@
-const Function = require('../models/functionModel');
-const Estimated = require('../models/estimatedModel');
-const User = require('../models/userModel');
-const VoteResult = require('../models/voteResultModel')
+const Function = require('../models/Function');
+const Estimated = require('../models/EstimateResult');
+const User = require('../models/User');
+const VoteResult = require('../models/VoteResult')
 const createError = require('http-errors');
 
 const functionsService = {
