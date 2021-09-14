@@ -12,6 +12,9 @@ var schema = mongoose.Schema({
         type: Array, require: true
     },
 
+},
+{
+    timestamps: true
 })
 var User = mongoose.model('user', schema)
 module.exports = User

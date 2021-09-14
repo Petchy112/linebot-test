@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const TimeResult = require('./timeResultModel');
 
 var choiceSchema = mongoose.Schema({
     name: { type: String, require: true },
     description: { type: String, require: true },
     time: { type: Number, require: false },
+    imagePath: { type: String, require: false },
 })
 
 var schema = mongoose.Schema({
@@ -13,7 +13,9 @@ var schema = mongoose.Schema({
     platform: { type: String, enum: ['WEBSITE', 'MOBILE'], require: false },
     group: { type: String, require: true },
     choice: { type: Array.of(choiceSchema), require: true },
-    updateAt: { type: Date, default: Date.now() }
+},
+{
+    timestamps: true,
 });
 
 var Function = mongoose.model('functions', schema)

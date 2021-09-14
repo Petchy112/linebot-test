@@ -13,6 +13,9 @@ var schema = mongoose.Schema({
     choices: { type: Array.of(choiceSchema), require: false },
     votingDate: { type: String, require: false },
     voteRound: { type:Number, require: false}
+},
+{
+    timestamps: true,
 });
 
 var VoteResult = mongoose.model('results', schema)
