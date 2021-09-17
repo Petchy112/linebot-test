@@ -8,6 +8,7 @@ var schema = mongoose.Schema({
     firstname: { type: String, require: true },
     lastname: { type: String, require: true },
     lineUserId: { type: String, require:false },
+    profilePic : { type: String, require:false },
     role: {
         type: Array, require: true
     },

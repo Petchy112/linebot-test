@@ -20,7 +20,7 @@ router.post('/login', async (req, res, next) => {
             next(createError(400, 'Password was empty'))
             return
         }
-        const result = await userService.login(body.email, body.password, body.lineUserId)
+        const result = await userService.login(body.email, body.password, body.lineUserId, body.profilePic)
         await res.json(result)
     }
     catch (error) {

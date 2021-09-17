@@ -30,13 +30,14 @@ const userService = {
             return { message: 'Register successful' }
         }
     },
-    async login(email, password, lineUserId) {
+    async login(email, password, lineUserId, profilePic) {
         console.log('login call',email)
         const thisUser = await User.findOne({ email });
         if (thisUser) {
             if (lineUserId) {
                 if (!thisUser.lineUserId) {
                     thisUser.lineUserId = lineUserId
+                    thisUser.profile = profilePic
                     await thisUser.save()
                 }
             }
