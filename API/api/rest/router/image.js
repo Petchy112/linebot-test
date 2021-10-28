@@ -15,7 +15,7 @@ cloudinary.config({
   });
 
 
-router.post('/upload', withAuth, upload.single('images'), async (req, res, next) => {
+router.post('/upload', upload.single('images'), async (req, res, next) => {
     try {
         const image = req['file']
         console.log(image);        
@@ -40,7 +40,7 @@ router.post('/uploadProfile', withAuth, upload.single('images'), async (req, res
             public_id: `${req.userId}`
         }) 
 
-        const userData = await User.findById(userId)
+        const userData = await User.findOne({userId : req.userId})
         userData.profilePic = result.secure_url
         await userData.save()
 
