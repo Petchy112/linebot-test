@@ -5,95 +5,51 @@ const imageService = require('../../../services/image');
 const createError = require('http-errors');
 const path = require('path');
 const upload = require('../../../multer/storage');
+const  cloudinary  = require('cloudinary').v2;
+const User = require('../../../models/User');
 
-router.post('/uploadUserImage', withAuth, upload.single('images'), async (req, res, next) => {
+cloudinary.config({
+    cloud_name: 'hf3sdjrow', 
+    api_key: '755298651479236', 
+    api_secret: 'D2Te4z6hhd1hqyJP3-4GVVLKWXE',
+  });
+
+
+router.post('/upload', withAuth, upload.single('images'), async (req, res, next) => {
     try {
         const image = req['file']
-        const accessToken = req.accessToken
-        const upload = await imageService.uploadUserImage(accessToken, image)
-        res.json(upload)
+        console.log(image);        
+        const result = await cloudinary.uploader.upload(image.path ,{
+            upload_preset: 'estimatedTime',
+            public_id: `${image.originalname}`
+        }) 
+        res.json({path : result.secure_url}) 
     }
     catch (error) {
         next(error)
         throw error
     }
 })
-router.post('/uploadChoiceImage', withAuth, upload.single('images'), async (req, res, next) => {
+
+router.post('/uploadProfile', withAuth, upload.single('images'), async (req, res, next) => {
     try {
         const image = req['file']
-        const accessToken = req.accessToken
-        const upload = await imageService.uploadChoiceImage(accessToken, image)
-        console.log(upload.id)
-        const imageData = await imageService.getChoiceImage(upload.id)
-        if (imageData.data) {
-            const image = {
-                id: imageData.data.id,
-                fullPath: 'http' + '://' + req.get('host') + '/image/getImage/' + imageData.data.name,
-            }
-            
-            res.json(image)
-        }
-        else {
-            res.json({})
-        }
+        console.log(image);        
+        const result = await cloudinary.uploader.upload(image.path ,{
+            upload_preset: 'estimatedTime',
+            public_id: `${req.userId}`
+        }) 
+
+        const userData = await User.findById(userId)
+        userData.profilePic = result.secure_url
+        await userData.save()
+
+        res.json({message:'Upload successfully!', path : result.secure_url}) 
     }
     catch (error) {
         next(error)
         throw error
     }
 })
-router.get('/getImage', async (req, res, next) => {
-    try {
-        const { query } = req
-        console.log(query.userId)
 
-        if (!query.userId) {
-            return
-        }
-        
-        const imageData = await imageService.getImage(query.userId)
-        console.log(imageData);
-        if (imageData.data) {
-            const image = {
-                id: imageData.data.id,
-                fullPath: 'http' + '://' + req.get('host') + '/image/getImage/' + imageData.data.name,
-            }
-
-            res.json(image)
-        }
-        else {
-            res.json({})
-        }
-    }
-    catch (error) {
-        next(error)
-
-    }
-})
-router.get('/getImage/:name', async(req, res, next) => {
-
-    const name = req.params.name
-    console.log(name)
-    if(name == null){
-        return
-    }
-
-    const options = {
-        root: path.join(__dirname, '../../../../uploads'),
-        dotfiles: 'deny',
-        headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true,
-            'Content-Type': 'image/png',
-        },
-    }
-    res.sendFile(name, options, function (err) {
-        if (err) {
-            next(err)
-        }
-        else {
-            console.log('Sent:', name)
-        }
-    })
-})
 module.exports =  router

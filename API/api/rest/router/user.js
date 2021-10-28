@@ -36,11 +36,11 @@ router.post('/selectRole', withAuth, async (req, res, next) => {
             }
             if(role == 'VOTER'){
                 var userId = req.headers['lineuserid']
-                client.linkRichMenuToUser(userId, "richmenu-b6eb563994d44457873e713e3e3f9983");
+                client.linkRichMenuToUser(userId, "richmenu-4d1399069af0e409fc0c3dfaaec678d4");
             }
             else if(role == 'COORDINATOR') {
                 var userId = req.headers['lineuserid']
-                client.linkRichMenuToUser(userId, "richmenu-1da35d47533444251b3d19743ef17f93");
+                client.linkRichMenuToUser(userId, "richmenu-d0a658e03d87c2d0dfaa8b770ecdf093");
             }
         var result = {message: 'selected role '}
         res.json(result)

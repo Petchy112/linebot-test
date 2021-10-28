@@ -9,10 +9,10 @@ var choiceSchema = mongoose.Schema({
 
 var schema = mongoose.Schema({
     status: {type: String, enum: ['OPEN','CLOSE'], default:'OPEN', require:true},
-    round: { type:Number, require:true, default: 0},
+    round: { type:Number, require:true, default: 1},
     platform: { type: String, enum: ['WEBSITE', 'MOBILE'], require: false },
     group: { type: String, require: true },
-    choice: { type: Array.of(choiceSchema), require: true },
+    choices: { type: Array.of(choiceSchema), require: true },
 },
 {
     timestamps: true,

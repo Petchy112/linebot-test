@@ -8,7 +8,7 @@ module.exports = config = {
     },
     auth: {
         expireIn: {
-            accessToken: 60 * 60
+            accessToken: 12 * 60 * 60
         }
     },
     line: {
