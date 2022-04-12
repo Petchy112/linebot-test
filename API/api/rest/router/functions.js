@@ -6,11 +6,14 @@ const createError = require('http-errors');
 const functionsService = require('../../../services/function');
 
 
-router.get('/', withAuth, async (req, res, next) => {
+router.get('/list', withAuth, async (req, res, next) => {
     try {
         var platform = req.query.platform
         const result = await Function.find({platform}).exec();
-        await res.json(result);
+        await res.json({
+            successful: true,
+            functionLists: result
+        });
     }
     catch (error) {
         next(error)
@@ -28,12 +31,12 @@ router.post('/add', withAuth , async (req, res, next) => {
             next(createError(400, 'Groupname was empty'))
             return
         }
-        if (!body.choice) {
+        if (!body.choices) {
             next(createError(400, 'Choice was empty'))
             return
         }
         const result = await functionsService.addFunction(req.body)
-        await res.json(result);
+        await res.json({result});
     }
     catch (error) {
         throw error
@@ -41,11 +44,15 @@ router.post('/add', withAuth , async (req, res, next) => {
 })
 router.get('/:id', withAuth, async (req, res, next) => {
     try {
-        console.log(req.params.id)
-        var idGroup = req.params.id
+        let idGroup = req.params.id
         await Function.findById((idGroup), (error, result) => {
-            if (error) next(createError(404 ,'Not Found'))
-            res.json(result);
+            if (error) {
+                next(createError(404 ,'Not Found'))
+            }
+            res.json({
+                successful: true,
+                functionLists: result
+            });
         })
     }
     catch (error) {
@@ -55,7 +62,6 @@ router.get('/:id', withAuth, async (req, res, next) => {
 })
 router.put('/:id/edit', withAuth, async (req, res, next) => {
     try {
-        console.log(req.params.id);
         const result = await functionsService.editFunction(req.params.id, req.body)
         res.json(result);
     }
@@ -67,9 +73,12 @@ router.put('/:id/edit', withAuth, async (req, res, next) => {
 router.delete('/:_id', withAuth, async (req, res, next) => {
     try {
         await Function.findByIdAndDelete((req.params._id), (err, result) => {
-            if (err) next(error)
-            result = { message: 'Function is deleted' }
-            res.json(result);
+            if (err){
+                 next(error)
+            }
+            res.json({
+                successful:true, message: 'Function was deleted' 
+            });
         })
     }
     catch {

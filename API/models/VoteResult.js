@@ -1,10 +1,24 @@
 const mongoose = require('mongoose')
 
+
 var choiceSchema = mongoose.Schema({
-    name: { type: String, require: true },
-    time: { type: Number, require: false, default: '', },
-    description: { type: String, require: false},
-    imagePath: { type: String , require: false},
+    name: { 
+        type: String,
+         require: true 
+        },
+    time: { 
+        type: Number,
+        require: false,
+        default: '',
+    },
+    description: {
+         type: String,
+         require: false
+        },
+    imagePath: { 
+        type: String,
+         require: false
+    },
 },
     { _id: false });
 

@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const withAuth = require('../middleware/withAuth');
-const Estimated = require('../../../models/EstimateResult')
-const functionsService = require('../../../services/function')
+const Estimated = require('../../../models/EstimateResult');
+const functionsService = require('../../../services/function');
 
-router.get('/', withAuth,  async (req, res, next) => {
+router.get('/list', withAuth,  async (req, res, next) => {
     try {
         const result = await Estimated.find().exec()
-        res.json(result);
+        console.log(result);
+        res.json({
+            successful: true,
+            estimateList: result
+        });
     }
     catch {
         next(error)

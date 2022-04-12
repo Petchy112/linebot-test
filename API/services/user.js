@@ -74,16 +74,17 @@ const userService = {
         await UserAuth.findOneAndDelete({ accessToken });
         return { message: 'Logout successful' }
     },
-    async getProfile(accessToken) {
+    async getProfile(userId) {
         try {
-            var userTokenData = await UserAuth.findOne({ accessToken })
-            var userInfo = await User.findOne({ userId: userTokenData.userId })
-            var result = {
+            const userTokenData = await UserAuth.findOne({ userId })
+            const userInfo = await User.findOne({ userId: userTokenData.userId })
+            const result = {
                 id: userInfo._id,
                 firstname: userInfo.firstname,
                 lastname: userInfo.lastname,
                 email: userInfo.email,
-                role: userInfo.role
+                role: userInfo.role,
+                profilePic : userInfo.profilePic
             }
             return result
         }
@@ -92,8 +93,13 @@ const userService = {
             throw error
         }
     },
-    async changePassword(oldPassword, newPassword, userId) {
-        var thisUser = await User.findOne({ userId })
+    async changePassword(input, userId) {
+        const {
+            oldPassword,
+            newPassword
+        } = input 
+        
+        const thisUser = await User.findOne({ userId })
         if (!await argon2.verify(thisUser.passwordHash, oldPassword)) {
             throw createError(400, 'Old password was invalid')
         }
@@ -104,7 +110,7 @@ const userService = {
             else {
                 thisUser.passwordHash = await argon2.hash(newPassword)
                 thisUser.save()
-                return { message: 'change password success.' }
+                return { successful: true, message: 'change password successful.' }
             }
         }
     },

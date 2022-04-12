@@ -1,11 +1,11 @@
 const Time = require('../models/Time');
-const Function = require('../models/Function');
+const {Function , status} = require('../models/Function');
 const createError = require('http-errors');
 const VoteResult = require('../models/VoteResult');
+const { log } = require('console');
 
 const voteService = {
     async ChangeStatusToClose(action) {
-        console.log(action)
         console.log('change vote status called');
         const result = await Function.find({status : 'OPEN'})
             await result.forEach(async doc => {
@@ -19,12 +19,11 @@ const voteService = {
         return { message : 'Voting is already close'}
     },
     async ChangeStatusToOpen(action) {
-
         console.log('change vote status called', action);
         const result = await Function.find({status : 'CLOSE'})
             await result.forEach(doc => {
                 if (doc.status == 'CLOSE') {
-                    doc.status = 'OPEN';
+                    doc.status = status.OPEN
                 }
                     doc.save();
                 });
@@ -37,9 +36,8 @@ const voteService = {
             if(functionData.status == 'CLOSE') {
                 throw createError(400, 'Voting is closed')
             }
-            console.log('choice : ',input.body[round].choiceId);
             
-            var createdChoice = await Time.findOne({ choiceId: input.body[round].choiceId })
+            const createdChoice = await Time.findOne({ choiceId: input.body[round].choiceId })
             if(!createdChoice) {
                 const newResult = new Time();
                     newResult.choiceId = input.body[round].choiceId,
@@ -69,7 +67,7 @@ const voteService = {
             
         
             const getName = []
-            await functionData.choice.map(el => {
+            await functionData.choices.map(el => {
                 getName.push({id:el._id, name:el.name})
             })
             const getChoice = []
@@ -91,7 +89,7 @@ const voteService = {
                 update.choices = rawData
                     await update.save()
             }
-            if (update==null) {
+            if (update == null) {
                 console.log('not found');
                 const setTime = new VoteResult()
                 setTime.platform = functionData.platform
@@ -103,20 +101,28 @@ const voteService = {
                     await setTime.save()
             }
         }
-        var result = { message:'Sent result successful!'}
-        return result
+        return { successful: true, message:'Sent result successful'}
         
     },
-    async getResult(voteRound, platform) {
-        const data = await VoteResult.find({ $and: [ { voteRound  }, { platform } ] }).exec()
-        console.log(data);
-        raw = []
-        data.map(ele => {
-            raw.push(
-                {voteRound, data:{group:ele.group,choices:ele.choices}})  
+    async getVoteDetail(id, platform) {
+        console.log('get vote detail called', id);
+        const voteResult = await VoteResult.find({ $and: [ { _id:id }, { platform } ] }).exec()
+        
+        const result = await Promise.all(voteResult.map(async item => {
+            return {
+                choices: item.choices,
+                platform: item.platform,
+                functionId: item.functionId,
+                group: item.group,
+            }
         })
-
-        return raw;
+        )
+        return { successful :true , data: result };
+        
+        
+        
+        // console.log(result);
+        
     }
 }
 

@@ -4,9 +4,18 @@ const cors = require('cors');
 const config = require('../../config');
 const routes = require('./router/index')
 const createError = require('http-errors')
+const multer = require('multer');
+const upload = multer();
 
 app.use(cors())
+app.disable('x-powered-by')
+
+// for parsing multipart/form-data
+app.use(upload.array()); 
+app.use(express.static('public'));
+// for parsing application/json
 app.use(express.json());
+// for parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 routes(app);

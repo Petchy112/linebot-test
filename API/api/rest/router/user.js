@@ -50,7 +50,7 @@ router.post('/selectRole', withAuth, async (req, res, next) => {
         throw error
     }
 })
-router.post('/register', withAuth, async (req, res, next) => {
+router.post('/add', withAuth, async (req, res, next) => {
     try{
         var { body } = req
         if (!body.email) {
@@ -108,10 +108,10 @@ router.post('/logout', withAuth, async (req, res, next) => {
         throw error
     }
 })
-router.get('/data', withAuth, async (req, res, next) => {
+router.get('/getProfile', withAuth, async (req, res, next) => {
     try {
-        const result = await userService.getProfile(req.headers.authorization.replace('Bearer ', ''))
-        res.json(result);
+        const result = await userService.getProfile(req.userId)
+        res.json({successful:true, profile:result});
     }
     catch {
         next(error);
@@ -119,7 +119,7 @@ router.get('/data', withAuth, async (req, res, next) => {
 })
 router.post('/changePassword', withAuth, async (req, res, next) => {
     try {
-        var { oldPassword, newPassword, confirmPassword } = req.body
+        const { oldPassword, newPassword, confirmPassword } = req.body
         if (!oldPassword) {
             next(createError(400, 'old password was empty'))
             return
@@ -136,17 +136,17 @@ router.post('/changePassword', withAuth, async (req, res, next) => {
             next(createError(400, 'password is not match'))
             return
         }
-        const result = await userService.changePassword(oldPassword, newPassword, req.userId)
+        const result = await userService.changePassword(req.body, req.userId)
         res.json(result)
     }
     catch (error) {
         next(error)
     }
 })
-router.get('/', withAuth, async (req, res, next) => {
+router.get('/list', withAuth, async (req, res, next) => {
     try {
         const result = await User.find().exec()
-        await res.json(result);
+        await res.json({successful: true , userLists: result});
     }
     catch(error) {
         next(error);
@@ -155,11 +155,10 @@ router.get('/', withAuth, async (req, res, next) => {
 })
 router.get('/:id', withAuth, async (req, res, next) => {
     try {
-        console.log(req.params.id)
-        var uid = req.params.id
+        let uid = req.params.id
         await User.findById((uid), (error, result) => {
             if (error) next(error)
-            res.json(result);
+            res.json({successful: true , user: result});
         })
     }
     catch (error) {
@@ -169,11 +168,9 @@ router.get('/:id', withAuth, async (req, res, next) => {
 })
 router.delete('/:id', withAuth, async (req, res, next) => {
     try {
-        console.log(req.params.id);
         await User.findByIdAndDelete((req.params.id), (err, result) => {
             if (err) next(error)
-            result = { message: 'User is deleted' }
-            res.json(result);
+            res.json({successful: true ,message: 'User was deleted' });
         })
     }
     catch {

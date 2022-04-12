@@ -10,29 +10,28 @@ const functionsService = {
 
         const functionData = new Function();
         functionData.group = input.group,
-        functionData.choices = input['choice'],
+        functionData.choices = input['choices'],
         functionData.platform = input.platform
             await functionData.save()
 
 
         if (functionData) {
-            return { message: 'Add function successful' ,id:functionData._id }
+            return { successful: true, message: 'Add function successful' ,id:functionData._id }
         }
-        return { message: 'Something went wrong!' }
+        return { successful: false, message: 'Something went wrong!' }
 
     },
     async editFunction(id, input) {
-        console.log('edit function called', id);
-        console.log(input)
-        await Function.findByIdAndUpdate({ _id: id }, {
+        console.log('edit function called', id,input);
+        await Function.findByIdAndUpdate( id , {
             group: input.group,
             choices: input['choice']
-        },{ new:true })
+        })
         await VoteResult.findOneAndUpdate({ functionId: id }, {
             group: input.group,
             
-        },{ new:true })
-        return { message: 'Edit successfully' }
+        })
+        return { successful: true, message: 'edit successfully' }
     },
     async saveEstimate(uid, result) {
         console.log('save estimate called', result);
