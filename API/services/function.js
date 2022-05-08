@@ -1,4 +1,4 @@
-const Function = require('../models/Function');
+const {Function} = require('../models/Function');
 const Estimated = require('../models/EstimateResult');
 const User = require('../models/User');
 const VoteResult = require('../models/VoteResult')
@@ -7,7 +7,13 @@ const createError = require('http-errors');
 const functionsService = {
     async addFunction(input) {
         console.log('add function called', input)
-
+        const checkStatus = await Function.find({status : 'OPEN'})
+        if(checkStatus) {
+            return {
+                successful: true,
+                message: 'Please turn off voting before adding new functions'
+            }
+        }
         const functionData = new Function();
         functionData.group = input.group,
         functionData.choices = input['choices'],

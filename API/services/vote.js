@@ -1,34 +1,23 @@
 const Time = require('../models/Time');
-const {Function , status} = require('../models/Function');
+const {Function, status}  = require('../models/Function');
 const createError = require('http-errors');
 const VoteResult = require('../models/VoteResult');
-const { log } = require('console');
 
 const voteService = {
-    async ChangeStatusToClose(action) {
+    async ChangeStatus() {
         console.log('change vote status called');
-        const result = await Function.find({status : 'OPEN'})
-            await result.forEach(async doc => {
-                if (doc.status == 'OPEN') {
-                        doc.status = 'CLOSE';
-                    await doc.round++;
-                }
-                    doc.save();
-                });
+        const result = await Function.find().exec()
+        await result.forEach(async (doc) => {
+            if (doc.status == 'CLOSE') {
+                doc.status = await status.OPEN
+            }
+            else {
+                doc.status = await  status.CLOSE
+            }
+                await doc.save();
+            });
 
-        return { message : 'Voting is already close'}
-    },
-    async ChangeStatusToOpen(action) {
-        console.log('change vote status called', action);
-        const result = await Function.find({status : 'CLOSE'})
-            await result.forEach(doc => {
-                if (doc.status == 'CLOSE') {
-                    doc.status = status.OPEN
-                }
-                    doc.save();
-                });
-
-        return { message : 'Voting is already open'}
+        return { successful: true, message : 'update status successful' , data: result}
     },
     async sentVote(uid, input) {
         for (let round = 0; round < input.body.length; round++) {

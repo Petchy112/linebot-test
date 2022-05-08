@@ -73,16 +73,8 @@ router.post('/save', withAuth, async (req, res, next) => {
 })
 router.post('/controlVote', withAuth, async (req, res, next) => {
     try {
-        let action = req.query.action
-        if(action=='OPEN') {
-            const result = await voteService.ChangeStatusToOpen(action);
-            res.json(result);
-        }
-        if (action=='CLOSE') {
-            const result = await voteService.ChangeStatusToClose(action);
-            res.json(result);
-        }
-        
+        const result = await voteService.ChangeStatus();
+        res.json(result);
     }
     catch (error) {
         next(error)

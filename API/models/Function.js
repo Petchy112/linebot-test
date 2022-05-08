@@ -27,7 +27,7 @@ var schema = mongoose.Schema({
         type: String,
         enum: [status] ,
         default: 'OPEN', 
-        require: true
+        require: false
     },
     // round: {
     //     type:Number, 
@@ -53,4 +53,4 @@ var schema = mongoose.Schema({
 });
 
 var Function = mongoose.model('functions', schema)
-module.exports = Function ,status
+module.exports = {Function, status}
