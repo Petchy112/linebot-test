@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Function = require('../../../models/Function');
+const {Function} = require('../../../models/Function');
 const withAuth = require('../middleware/withAuth');
 const createError = require('http-errors');
 const functionsService = require('../../../services/function');
@@ -8,8 +8,14 @@ const functionsService = require('../../../services/function');
 
 router.get('/list', withAuth, async (req, res, next) => {
     try {
-        var platform = req.query.platform
-        const result = await Function.find({platform}).exec();
+        let platform = req.query.platform
+        console.log(platform);
+        let result
+        if(platform != 'undefined') {
+            result = await Function.find({platform}).exec();
+        }else {
+            result = await Function.find().exec();
+        }
         await res.json({
             successful: true,
             functionLists: result
