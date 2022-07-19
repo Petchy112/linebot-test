@@ -18,7 +18,7 @@ router.get('/list', withAuth,  async (req, res, next) => {
         throw error
     }
 })
-router.get('/:id', withAuth, async (req, res, next) => {
+router.get('/:id/detail', withAuth, async (req, res, next) => {
     try {
         console.log(req.params.id);
         var sid = req.params.id
