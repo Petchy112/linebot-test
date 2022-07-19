@@ -4,7 +4,6 @@ const VoteResult = require('../../../models/VoteResult');
 const withAuth = require('../middleware/withAuth');
 const createError = require('http-errors');
 const voteService = require('../../../services/vote');
-const Function = require('../../../models/Function');
 const moment = require('moment');
 // const sortHelper = require('../../../helper/sortArrByDate'); 
 

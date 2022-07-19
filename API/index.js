@@ -6,7 +6,7 @@ EventEmitter.defaultMaxListeners = 25
 
 
 const run = async () => {
-    await database()
-    restAPI()
+    database()
+    await restAPI()
 }
 run();
