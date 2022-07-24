@@ -85,7 +85,8 @@ const userService = {
                 lastname: userInfo.lastname,
                 email: userInfo.email,
                 role: userInfo.role,
-                profilePic : userInfo.profilePic
+                profilePic : userInfo.profilePic,
+                position : userInfo.position
             }
             return result
         }
