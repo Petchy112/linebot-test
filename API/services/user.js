@@ -15,6 +15,7 @@ const userService = {
         userdata.firstname = input.firstname
         userdata.lastname = input.lastname
         userdata.role = input.role
+        userdata.position = input.position
         
 
         var isExistEmail = await User.findOne({ email: input.email })

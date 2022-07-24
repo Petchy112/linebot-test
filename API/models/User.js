@@ -12,6 +12,8 @@ var schema = mongoose.Schema({
     role: {
         type: Array, require: true
     },
+    position : { type: String, require:true },
+
 
 },
 {

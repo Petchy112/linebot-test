@@ -85,6 +85,10 @@ router.post('/add', withAuth, async (req, res, next) => {
             next(createError(400, 'Role was empty'))
             return
         }
+        if (!body.position) {
+            next(createError(400, 'Position was empty'))
+            return
+        }
         const result = await userService.register(req.body);
         res.json(result);
     }
