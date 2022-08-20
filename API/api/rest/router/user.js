@@ -30,16 +30,16 @@ router.post('/login', async (req, res, next) => {
 })
 router.post('/selectRole', withAuth, async (req, res, next) => {
     try {
-        var role = req.body.role
+        let role = req.body.role
             if(role == 'ADMIN'){
                 next(createError(403 , 'ADMIN NOT PERMISSION IN LINE'))
             }
             if(role == 'VOTER'){
-                var userId = req.headers['lineuserid']
+                var userId = req.body.lineUserId
                 client.linkRichMenuToUser(userId, "richmenu-4d1399069af0e409fc0c3dfaaec678d4");
             }
             else if(role == 'COORDINATOR') {
-                var userId = req.headers['lineuserid']
+                var userId = req.body.lineUserId
                 client.linkRichMenuToUser(userId, "richmenu-d0a658e03d87c2d0dfaa8b770ecdf093");
             }
         var result = {message: 'selected role '}
@@ -100,10 +100,9 @@ router.post('/add', withAuth, async (req, res, next) => {
 })
 router.post('/logout', withAuth, async (req, res, next) => {
     try {
-        console.log(req.headers['lineuserid']);
-        const result = await userService.revokeAccessToken(req.accessToken,req.headers['lineuserid'])
-        if(req.headers['lineuserid']) {
-            client.unlinkRichMenuFromUser(req.headers['lineuserid']);
+        const result = await userService.revokeAccessToken(req.accessToken)
+        if(req.body['lineUserId']) {
+            client.unlinkRichMenuFromUser(req.body['lineUserId']);
         }
         res.json(result);
     }
@@ -160,10 +159,18 @@ router.get('/list', withAuth, async (req, res, next) => {
 router.get('/:id', withAuth, async (req, res, next) => {
     try {
         let uid = req.params.id
-        await User.findById((uid), (error, result) => {
-            if (error) next(error)
-            res.json({successful: true , user: result});
-        })
+        const data = await User.findById(uid)
+        let user = {
+            firstname: data.firstname,
+            lastname: data.lastname,
+            email: data.email,
+            role: data.role,
+            position: data.position
+        }
+        res.json({
+            successful: true,
+            user
+        });
     }
     catch (error) {
         next(error)
