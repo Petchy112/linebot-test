@@ -8,9 +8,9 @@ const functionsService = {
     async addFunction(input) {
         console.log('add function called', input)
         const checkStatus = await Function.find({status : 'OPEN'})
-        if(checkStatus) {
+        if(checkStatus.length != 0) {
             return {
-                successful: true,
+                successful: false,
                 message: 'Please turn off voting before adding new functions'
             }
         }
