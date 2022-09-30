@@ -6,10 +6,6 @@
   "repository": "https://github.com/Petchy112/linebot-test.git",
   "author": "Kittikan Ditkhanan <petch_501_@hotmail.com>",
   "license": "MIT",
-  "engines": {
-    "node": "14.15.5",
-    "npm": "6.14.11"
-  },
   "scripts": {
     "dev": "nodemon API/index.js",
     "start": "node API/index.js",
@@ -18,6 +14,7 @@
   "dependencies": {
     "@line/bot-sdk": "^7.3.0",
     "@phc/argon2": "^1.0.9",
+    "axios": "^0.27.2",
     "cloudinary": "^1.27.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
