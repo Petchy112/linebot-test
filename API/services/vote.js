@@ -2,6 +2,7 @@ const Time = require('../models/Time');
 const {Function, status}  = require('../models/Function');
 const createError = require('http-errors');
 const VoteResult = require('../models/VoteResult');
+const pushMessageService = require('../services/webhook')
 
 const voteService = {
     async ChangeStatus() {
@@ -15,6 +16,7 @@ const voteService = {
                 doc.status = await  status.CLOSE
             }
                 await doc.save();
+                await pushMessageService.pushVotingMessage();
             });
 
         return { successful: true, message : 'update status successful' , data: result}
