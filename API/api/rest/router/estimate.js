@@ -7,13 +7,12 @@ const functionsService = require('../../../services/function');
 router.get('/list', withAuth,  async (req, res, next) => {
     try {
         const result = await Estimated.find().exec()
-        console.log(result);
         res.json({
             successful: true,
             estimateList: result
         });
     }
-    catch {
+    catch (error) {
         next(error)
         throw error
     }
@@ -25,7 +24,7 @@ router.get('/:id/detail', withAuth, async (req, res, next) => {
         const result = await Estimated.findById({_id:sid})
         res.json(result);
     }
-    catch {
+    catch (error) {
         next(error)
         throw error
     }
@@ -35,7 +34,7 @@ router.post('/save', withAuth, async (req, res, next) => {
         const result = await functionsService.saveEstimate(req.userId, req.body)
         res.json(result);
     }
-    catch {
+    catch (error) {
         next(error)
         throw error
     }
