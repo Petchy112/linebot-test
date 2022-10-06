@@ -39,9 +39,12 @@ router.get('/list', async (req, res, next) => {
 })
 router.get('/result', async (req, res, next) => {
     try {
-        var platform = req.query.platform
+        let platform = req.query.platform
         const result = await VoteResult.find({platform}).exec()
-        await res.json(result);
+        await res.json({
+            successful : 'true',
+            data: result
+        });
     }
     catch (error) {
         next(error)
