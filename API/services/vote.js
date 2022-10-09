@@ -25,7 +25,7 @@ const voteService = {
         for (let round = 0; round < input.body.length; round++) {
             const functionData = await Function.findById(input.body[round].fid)
             if(functionData.status == 'CLOSE') {
-                throw createError(400, 'Voting is closed')
+                return { successful: false, message:'Voting has disabled'}
             }
             
             const createdChoice = await Time.findOne({ choiceId: input.body[round].choiceId })
