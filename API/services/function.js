@@ -14,15 +14,18 @@ const functionsService = {
                 message: 'Please turn off voting before adding new functions'
             }
         }
-        const functionData = new Function();
-        functionData.group = input.group,
-        functionData.choices = input['choices'],
-        functionData.platform = input.platform
-            await functionData.save()
+        const checkRound = await Function.findOne({"status":"CLOSE"})
+        if(checkRound.round) {
+            const functionData = new Function();
+            functionData.group = input.group,
+            functionData.choices = input['choices'],
+            functionData.platform = input.platform
+            functionData.round = checkRound.round
+                await functionData.save()
 
-
-        if (functionData) {
-            return { successful: true, message: 'Add function successful' ,id:functionData._id }
+            if (functionData) {
+                return { successful: true, message: 'Add function successful' ,id:functionData._id }
+            }
         }
         return { successful: false, message: 'Something went wrong!' }
 

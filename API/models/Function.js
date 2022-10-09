@@ -26,14 +26,14 @@ var schema = mongoose.Schema({
     status: {
         type: String,
         enum: [status] ,
-        default: 'OPEN', 
+        default: 'CLOSE', 
         require: false
     },
-    // round: {
-    //     type:Number, 
-    //     require:true,
-    //     default: 1
-    // },
+    round: {
+        type:Number, 
+        require:true,
+        default: 1
+    },
     platform: {
         type: String, 
         enum: ['WEBSITE', 'MOBILE'],
